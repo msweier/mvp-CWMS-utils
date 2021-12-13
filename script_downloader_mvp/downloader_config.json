@@ -12,7 +12,7 @@
       "filename": "gateEntry.py",
       "update_libs": true,
       "help_url": "",
-      "config_files": [""]
+      "config_files": []
     },
     "Script Downloader MVP": {
       "remote_dir": "watershed_scripts",
