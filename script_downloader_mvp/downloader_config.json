@@ -4,7 +4,7 @@
       "remote_dir": "watershed_scripts",
       "filename": "Daily_Reg_Sheet.py",
       "update_libs": true,
-      "help_url": "",
+      "help_url": "https://github.com/msweier/mvp-CWMS-utils/blob/main/appdata/rsgis/REGSHEET.md",
       "config_files": ["DailyRegSheet_Computations.xlsx"]
     },
     "Gate Entry": {
