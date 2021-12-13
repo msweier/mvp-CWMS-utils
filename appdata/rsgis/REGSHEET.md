@@ -96,4 +96,3 @@ Copy your desktop folder (DailyRegSheet) and paste to the server location above.
  
 Email water management notice of an updated folder on the server, and attach these instructions to the email.
 Send a reminder stating when anyone copies this updated folder to their desktop to use the new information, they will need to delete the date off the folder name for the script to work properly and place the data in the folder.
-![image](https://user-images.githubusercontent.com/9432394/145874924-7249c5ab-be20-403a-9094-137f08d439ee.png)
