@@ -1,0 +1,20 @@
+{
+  "scripts": {
+    "Mississippi River Reg Sheet": {
+      "remote_dir": "watershed_scripts",
+      "filename": "Daily_Reg_Sheet.py",
+      "update_libs": true,
+      "help_url": "",
+      "config_files": ["DailyRegSheet_Computations.xlsx"]
+    },
+    "Script Downloader": {
+      "remote_dir": "watershed_scripts",
+      "filename": "script_downloader_mvp.py",
+      "update_libs": false,
+      "help_url": null,
+      "config_files": []
+    }
+  },
+  "third_party_libs": {},
+  "version": "13Dec2021"
+}
