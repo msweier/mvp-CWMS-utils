@@ -7,6 +7,13 @@
       "help_url": "",
       "config_files": ["DailyRegSheet_Computations.xlsx"]
     },
+    "Gate Entry": {
+      "remote_dir": "watershed_scripts",
+      "filename": "gateEntry.py",
+      "update_libs": true,
+      "help_url": "",
+      "config_files": [""]
+    },
     "Script Downloader MVP": {
       "remote_dir": "watershed_scripts",
       "filename": "script_downloader_mvp.py",
