@@ -10,7 +10,7 @@
     "Gate Entry": {
       "remote_dir": "watershed_scripts",
       "filename": "gateEntry.py",
-      "update_libs": true,
+      "update_libs": false,
       "help_url": null,
       "config_files": []
     },
