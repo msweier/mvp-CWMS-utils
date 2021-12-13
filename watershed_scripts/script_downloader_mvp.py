@@ -242,7 +242,7 @@ def isScriptButtonAdded(filename):
 ################################################################################
 def main():
 
-	code_version = '24Aug2021'
+	code_version = '13Dec2021'
 	# Get the config file stored on Github.
 	# This allows new scripts to be added without this script needing to be replaced on every PC/Server Watershed
 
@@ -263,11 +263,11 @@ def main():
 	file_version_dt = datetime.datetime.strptime(fileVersion, '%d%b%Y')
 
 	if code_version_dt < file_version_dt:
-		msg = "Script Downloader is out of date, please update using this script.\nLatest version: "\
+		msg = "Script Downloader MVP is out of date, please update using this script.\nLatest version: "\
 		+appConfig['version']+'\nYour version: '+code_version
 		JOptionPane.showMessageDialog(None, msg, "Version Check", JOptionPane.ERROR_MESSAGE)
 	else:
-		print('Script Downloader Version is current.')
+		print('Script Downloader MVP Version is current.')
 
 	choices = appConfig['scripts'].keys()
 	choices.sort()
