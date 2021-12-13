@@ -7,7 +7,7 @@
       "help_url": "",
       "config_files": ["DailyRegSheet_Computations.xlsx"]
     },
-    "Script Downloader": {
+    "Script Downloader MVP": {
       "remote_dir": "watershed_scripts",
       "filename": "script_downloader_mvp.py",
       "update_libs": false,
