@@ -3,9 +3,10 @@ Mississippi Navigation Regulation Sheet
 For use in daily regulation of Lock and Dam 2 through Lock and Dam 10
 Developed Jan 2019 (updated Dec 2021 by m. weier)
  
+ 
 Author: Nathaniel Anderson 
 nathaniel.d.anderson@usace.army.mil
-
+ 
 Purpose and Scope:
 This new regulation sheet was developed at the request of the current St. Paul District Water Management and Hydrology section chief: Elizabeth Nelsen. The project scope was to create a new version of a regulation sheet in order to support the daily orders from water management to the locks and dams of the navigable Mississippi River within the St. Paul District (LD2-LD10). 
 The St. Paul District water management team is in the process of changing platforms for data management from an antiquated “hornet” system to the current Corps platform (CWMS) for water management. The new CWMS platform stores data in CWMSvue using .dss files. The new regulation sheet is intended to work with this new platform and allow the district to obtain data without accessing the antiquated “hornet” system. 
@@ -86,3 +87,4 @@ Copy your desktop folder (DailyRegSheet) and paste to the server location above.
  
 Email water management notice of an updated folder on the server, and attach these instructions to the email.
 Send a reminder stating when anyone copies this updated folder to their desktop to use the new information, they will need to delete the date off the folder name for the script to work properly and place the data in the folder.
+![image](https://user-images.githubusercontent.com/9432394/146250987-849e9dca-68be-43ea-86d8-d0f3d429978c.png)
