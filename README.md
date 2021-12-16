@@ -13,7 +13,7 @@ Select all code in the browser (Ctrl + A)
 
 Copy code to your clipboard (Ctrl + C)
 
-Create a new script from the CAVI Script Editor and name it script_downloader
+Create a new script from the CAVI Script Editor and name it exactly as "script_downloader_mvp" (it is case sensitve)
 
 Paste code (Ctrl + V) into the new CAVI script
 
