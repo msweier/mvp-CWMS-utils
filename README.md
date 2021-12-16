@@ -7,7 +7,7 @@ USACE St. Paul District CWMS Utilities
  
  Read instructions before executing.
 
-Click here for the raw script_downloader_mvp code
+Click  <a href="https://www.w3schools.com/">here</a>  for the raw script_downloader_mvp code
 
 Select all code in the browser (Ctrl + A)
 
