@@ -1,15 +1,31 @@
 from hec.heclib.util import HecTime
-from hec.script import Plot
+from hec.script import Plot, MessageBox
 from java.util import Calendar, TimeZone
 from java.lang import System
 import DBAPI, hec
 from hec.cwmsVue import CwmsListSelection
 from hec.script import AxisMarker
 from com.rma.client import Browser
+from javax.swing		import JOptionPane
 import shutil
 import os
 import java
-from hec.dataTable                  import HecDataTableToExcel
+from hec.dataTable                  import HecDataTableToExcel, HecDataTableFrame
+from com.rma.model import Project
+
+###############
+flowTypes = ['Hornet Comp (Legacy) - green', 'CWMS Comp - red']
+flowTypeSelection = JOptionPane.showInputDialog(None,"Choose Flow Comp to Display","Daily Reg Sheet",JOptionPane.PLAIN_MESSAGE,None,flowTypes,flowTypes[0])
+
+#set True to use hornet flow, False for CWMS comp flow
+if flowTypeSelection == flowTypes[0]:
+	legacyFlow = True
+else:
+	legacyFlow = False
+
+###########
+
+
 # Determine Script Context
 isClient = hec.lang.ClientAppCheck.haveClientApp()
 isCWMSVue = hec.cwmsVue.CwmsListSelection.getMainWindow() is not None
@@ -53,16 +69,28 @@ idtail8 = 'LockDam_08-Tailwater.Elev.Inst.15Minutes.0.rev-MSL1912'
 idtail9 = 'LockDam_09-Tailwater.Elev.Inst.15Minutes.0.rev-MSL1912'
 idtail10 = 'LockDam_10-Tailwater.Elev.Inst.1Hour.0.rev-MSL1912'
 # flow
-idflow2 = 'LockDam_02.Flow.Inst.15Minutes.0.comp'
-idflow3 = 'LockDam_03.Flow.Inst.15Minutes.0.comp'
-idflow4 = 'LockDam_04.Flow.Inst.15Minutes.0.comp'
-idflow5 = 'LockDam_05.Flow.Inst.15Minutes.0.comp'
-idflow5a = 'LockDam_05a.Flow.Inst.15Minutes.0.comp'
-idflow6 = 'LockDam_06.Flow.Inst.15Minutes.0.comp'
-idflow7 = 'LockDam_07.Flow.Inst.15Minutes.0.comp'
-idflow8 = 'LockDam_08.Flow.Inst.15Minutes.0.comp'
-idflow9 = 'LockDam_09.Flow.Inst.15Minutes.0.comp'
-idflow10 = 'LockDam_10.Flow.Inst.1Hour.0.comp'
+if not legacyFlow:
+	idflow2 = 'LockDam_02.Flow.Inst.15Minutes.0.comp'
+	idflow3 = 'LockDam_03.Flow.Inst.15Minutes.0.comp'
+	idflow4 = 'LockDam_04.Flow.Inst.15Minutes.0.comp'
+	idflow5 = 'LockDam_05.Flow.Inst.15Minutes.0.comp'
+	idflow5a = 'LockDam_05a.Flow.Inst.15Minutes.0.comp'
+	idflow6 = 'LockDam_06.Flow.Inst.15Minutes.0.comp'
+	idflow7 = 'LockDam_07.Flow.Inst.15Minutes.0.comp'
+	idflow8 = 'LockDam_08.Flow.Inst.15Minutes.0.comp'
+	idflow9 = 'LockDam_09.Flow.Inst.15Minutes.0.comp'
+	idflow10 = 'LockDam_10.Flow.Inst.1Hour.0.comp'
+else:
+	idflow2 = 'LockDam_02.Flow.Inst.15Minutes.0.comp'.replace( '15Minutes.0.comp','~4Hours.0.CEMVP-Legacy')
+	idflow3 = 'LockDam_03.Flow.Inst.15Minutes.0.comp'.replace( '15Minutes.0.comp','~4Hours.0.CEMVP-Legacy')
+	idflow4 = 'LockDam_04.Flow.Inst.15Minutes.0.comp'.replace( '15Minutes.0.comp','~4Hours.0.CEMVP-Legacy')
+	idflow5 = 'LockDam_05.Flow.Inst.15Minutes.0.comp'.replace( '15Minutes.0.comp','~4Hours.0.CEMVP-Legacy')
+	idflow5a = 'LockDam_05a.Flow.Inst.15Minutes.0.comp'.replace( '15Minutes.0.comp','~4Hours.0.CEMVP-Legacy')
+	idflow6 = 'LockDam_06.Flow.Inst.15Minutes.0.comp'.replace( '15Minutes.0.comp','~4Hours.0.CEMVP-Legacy')
+	idflow7 = 'LockDam_07.Flow.Inst.15Minutes.0.comp'.replace( '15Minutes.0.comp','~4Hours.0.CEMVP-Legacy')
+	idflow8 = 'LockDam_08.Flow.Inst.15Minutes.0.comp'.replace( '15Minutes.0.comp','~4Hours.0.CEMVP-Legacy')
+	idflow9 = 'LockDam_09.Flow.Inst.15Minutes.0.comp'.replace( '15Minutes.0.comp','~4Hours.0.CEMVP-Legacy')
+	idflow10 = 'LockDam_10.Flow.Inst.1Hour.0.comp'.replace( '1Hour.0.comp','~4Hours.0.CEMVP-Legacy')
 # hydropower
 idfordp = 'LockDam_01-Powerhouse.Flow.Inst.~1Day.0.CEMVP-Legacy'
 idhydro2 = 'LockDam_02-Powerhouse.Flow.Inst.~4Hours.0.CEMVP-Legacy'
@@ -147,27 +175,53 @@ idld7precip = 'LockDam_07.Precip-inc.Total.~1Day.1Day.CEMVP-Legacy'
 idld8precip = 'LockDam_08.Precip-inc.Total.~1Day.1Day.CEMVP-Legacy'
 idld9precip = 'LockDam_09.Precip-inc.Total.~1Day.1Day.CEMVP-Legacy'
 idld10precip = 'LockDam_10.Precip-inc.Total.~1Day.1Day.CEMVP-Legacy'
+
+idld10forecast = 'LockDam_10.Flow.Inst.6Hours.0.Fcst-NCRFC-CHIPS'
+idWisconsin = 'MUSW3.Flow.Inst.15Minutes.0.comp'
 # Database Connection
 db = DBAPI.open()
-db.setTimeZone("UTC")
+db.setTimeZone("America/Chicago")
+#db.setTimeZone("UTC")
 # set time
 cal = Calendar.getInstance()
-cal.setTimeZone(TimeZone.getTimeZone("UTC"))
+cal.setTimeZone(TimeZone.getTimeZone("America/Chicago"))
 cal.setTimeInMillis(System.currentTimeMillis())
 t = HecTime(cal)
 #print t.dateAndTime(104)
 curTime = t.dateAndTime(104)
+curdate = t.date(104)
 t.setTime('0000')
+##############
+#t.setDate('2021-11-05')
+#curTime = t.dateAndTime(104)
+#curdate = t.date(104)
 #print t.dateAndTime(104)
-t.subtractHours(107)
+###############
+t.subtractHours(112)
+#t.subtractHours(4)
 #print t.dateAndTime(104)
 startTime = t.dateAndTime(104)
-db.setTimeWindow(startTime, curTime)
+
+t.addHours(112+24*5)
+fcstTime = t.dateAndTime(104)
+db.setTimeWindow(startTime, fcstTime)
+print(startTime, curTime)
+
 # Get Data
 # pool
 elev2 = db.get(idelev2)
+#print(elev2.times)
+print(elev2.times[0])
+
+ht = HecTime()
+ht.set(elev2.times[-1])
+print(ht.toString())
+
+
 elev3 = db.get(idelev3)
+
 elev4 = db.get(idelev4)
+
 elev5 = db.get(idelev5)
 elev5a = db.get(idelev5a)
 elev6 = db.get(idelev6)
@@ -175,6 +229,7 @@ elev7 = db.get(idelev7)
 elev8 = db.get(idelev8)
 elev9 = db.get(idelev9)
 elev10 = db.get(idelev10)
+
 # control points
 Stpl = db.get(idelev2c1)
 Sthstpl = db.get(idelev2c2)
@@ -296,13 +351,22 @@ ld7precip = db.get(idld7precip)
 ld8precip = db.get(idld8precip)
 ld9precip = db.get(idld9precip)
 ld10precip = db.get(idld10precip)
+ld10forecast = db.get(idld10forecast)
+
+wisconsin = db.get(idWisconsin)
+
 # Close Database
 db.done()
 #set datasets
 datasets = java.util.Vector()
 # pool
+#print(elev2.getTimeZoneID())
+#print(elev2.getTimes())
+#print(elev2.getTimes())
 datasets.add(elev2)	
 datasets.add(elev3)
+
+
 datasets.add(elev4)	
 datasets.add(elev5)
 datasets.add(elev5a)	
@@ -435,14 +499,66 @@ datasets.add(ld10precip)
 datasets.add(Brwnsvl)
 #Dakota
 datasets.add(Dkta)
+
+datasets.add(ld10forecast)
+datasets.add(wisconsin)
+
+
+
+###put dataset into table to convert time to Local...not sure why this works
+table = HecDataTableFrame.newTable("Output")
+table.setData(datasets)
+print(elev2.getTimeZoneID())
+print(table.getTimeZone())
+table.setTimeZone(TimeZone.getTimeZone("America/Chicago"))
+print(table.getTimeZone())
+#table.showTable()
+
+
+#set datasets
+
+
+
 #export to excel
-list = []
-list.append(datasets)
+myList = []
+myList.append(datasets)
+
+
 ExcelTable = HecDataTableToExcel.newTable()
-t= HecTime(cal)
-#print t.date(104)
-curdate = t.date(104)
+
+
+
+#watershed Path
+watershed_path = Project.getCurrentProject().getProjectDirectory()
+sharedPath = os.path.join(watershed_path,'shared')
+
+
+#desktop path
 user = os.getenv('username')
-ExcelTable.createExcelFile(list, "C:\Users\%s\Desktop\DailyRegSheet\DRS.xlsx" %user)
-shutil.copyfile("C:\Users\%s\Desktop\DailyRegSheet\DailyRegSheet_Computations.xlsx"%user,"C:\Users\%s\Desktop\DailyRegSheet\DailyRegSheet%s.xlsx" %(user,curdate))
-os.popen("C:\Users\%s\Desktop\DailyRegSheet\DailyRegSheet%s.xlsx" %(user,curdate))
+desktopPath = "C:\Users\{}\Desktop\DailyRegSheet".format(user)
+##create directory if it doesn't exist
+if not os.path.exists(desktopPath):
+	os.makedirs(desktopPath)
+
+#create data dump for excel file to reference
+dsrSheet = os.path.join(desktopPath,'DRS.xlsx')
+ExcelTable.createExcelFile(myList, dsrSheet)
+#os.popen(dsrSheet)
+
+
+#make copy of regsheet so edits aren't made to master sheet
+masterSheet = os.path.join(sharedPath, "DailyRegSheet_Computations.xlsx")
+
+dailySheet = os.path.join(desktopPath, "DailyRegSheet_Computations{}.xlsx".format(curdate))
+shutil.copyfile(masterSheet,dailySheet)
+
+##convert table back to UTC so database view isn't set to UTC...not sure why that works...must be a bug
+table.setTimeZone(TimeZone.getTimeZone("UTC"))
+
+os.popen(dailySheet)
+
+print("Saved Reg Sheet at: {}".format(dailySheet))
+MessageBox.showPlain("Saved Reg Sheet at: {}".format(dailySheet), "Daily Reg Sheet Script")
+
+
+
