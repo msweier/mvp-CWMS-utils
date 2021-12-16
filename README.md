@@ -7,7 +7,7 @@ USACE St. Paul District CWMS Utilities
  
  Read instructions before executing.
 
-Click  <a href="https://github.com/msweier/mvp-CWMS-utils/blob/main/watershed_scripts/Daily_Reg_Sheet.py">here</a>  for the raw script_downloader_mvp code
+Click  <a href="https://github.com/msweier/mvp-CWMS-utils/blob/main/watershed_scripts/script_downloader_mvp.py">here</a>  for the raw script_downloader_mvp code
 
 Select all code in the browser (Ctrl + A)
 
