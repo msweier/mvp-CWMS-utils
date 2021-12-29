@@ -182,6 +182,7 @@ if flowTypeSelection:
 	
 	idld10forecast = 'LockDam_10.Flow.Inst.6Hours.0.Fcst-NCRFC-CHIPS'
 	idWisconsin = 'MUSW3.Flow.Inst.15Minutes.0.comp'
+	idKick = 'STEW3.Flow.Inst.15Minutes.0.rev'
 	# Database Connection
 	db = DBAPI.open()
 	db.setTimeZone("America/Chicago")
@@ -357,7 +358,11 @@ if flowTypeSelection:
 	ld10precip = db.get(idld10precip)
 	ld10forecast = db.get(idld10forecast)
 	
-	wisconsin = db.get(idWisconsin)
+	wisconsin = db.read(idWisconsin)
+	kick = db.read(idKick)
+	wiscoKick = wisconsin.add(kick).getData()
+	wisconsin = wisconsin.getData()
+	kick = kick.getData()
 	
 	# Close Database
 	db.done()
@@ -505,7 +510,10 @@ if flowTypeSelection:
 	datasets.add(Dkta)
 	
 	datasets.add(ld10forecast)
+	datasets.add(wiscoKick)
 	datasets.add(wisconsin)
+	datasets.add(kick)
+	
 	
 	
 	
