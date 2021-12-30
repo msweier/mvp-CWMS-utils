@@ -14,8 +14,9 @@ from hec.dataTable                  import HecDataTableToExcel, HecDataTableFram
 from com.rma.model import Project
 
 ###############
+code_version = '30Dec2021'
 flowTypes = ['Hornet Comp (Legacy) - green', 'CWMS Comp - red']
-flowTypeSelection = JOptionPane.showInputDialog(None,"Choose Flow Comp to Display","Daily Reg Sheet",JOptionPane.PLAIN_MESSAGE,None,flowTypes,flowTypes[0])
+flowTypeSelection = JOptionPane.showInputDialog(None,"Choose Flow Comp to Display","Daily Reg Sheet - ver. {}".format(code_version),JOptionPane.PLAIN_MESSAGE,None,flowTypes,flowTypes[0])
 
 if flowTypeSelection:
 	print(flowTypeSelection)
