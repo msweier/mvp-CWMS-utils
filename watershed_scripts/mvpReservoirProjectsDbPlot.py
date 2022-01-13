@@ -6,16 +6,15 @@ from java.lang import System
 from javax.swing import JOptionPane, JTextArea, JScrollPane
 from collections import OrderedDict
 from hec.cwmsVue import CwmsListSelection
+from hec.script import AxisMarker
 
 def pathParser(dssPath):
-    print
     blank, aPart, bPart, cPart, dPart, ePart, fPart, blank2 = dssPath.split('/')
     return aPart, bPart, cPart, dPart, ePart, fPart
 def markerBand(value, label, viewport, color):
     '''
     Adds a horizontal marker to plot viewport
     '''
-    from hec.script import AxisMarker
     mb = AxisMarker()
     mb.value = value
     mb.labelText = label
