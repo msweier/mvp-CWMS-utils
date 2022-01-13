@@ -7,6 +7,13 @@
       "help_url": "https://github.com/msweier/mvp-CWMS-utils/blob/main/appdata/rsgis/REGSHEET.md",
       "config_files": ["DailyRegSheet_Computations.xlsx"]
     },
+    "MVP Reservoir Plot DB": {
+      "remote_dir": "watershed_scripts",
+      "filename": "mvpReservoirProjectsDbPlot.py",
+      "update_libs": true,
+      "help_url": null,
+      "config_files": ["projectDBplotInputs.csv"]
+    },
     "Gate Entry": {
       "remote_dir": "watershed_scripts",
       "filename": "gateEntry.py",
