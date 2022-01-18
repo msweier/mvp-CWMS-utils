@@ -82,8 +82,20 @@ def lastValidDateString(tsData):
 	print(lastTime.dateAndTime(104))
 	return lastTime.dateAndTime(104)
 
+try:
+# Add rtsutils package to sys.path before importing
+    sys.path.append(os.path.join(os.environ['APPDATA'], "rsgis"))
+    from rtsutils import cavistatus, usgs
+except ImportError, ex:
+    raise
+
 ##read imputs from file
-filePath = r'C:\Users\b6ecmsw7\Documents\CWMS_Models\CWMS_OtherLocations32\watershed\CEMVP_Souris_CWMS\shared\projectDBplotInputs.csv'
+
+filePath = os.path.join(
+    cavistatus.get_shared_directory(),
+    'projectDBplotInputs.csv'
+    )
+print(filePath)
 daysToLookBack = 7
 daysToLookForward = 5
 
