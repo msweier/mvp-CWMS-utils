@@ -113,6 +113,9 @@ def script_downloader(remote_repo, selection, appConfig):
 					downloaded_configs.append(fileDstPath)
 				else:
 					print 'Skipping download of config file: {}'.format(fname)
+			else:
+				download_file(fileSrcURL, fileDstPath)
+				downloaded_configs.append(fileDstPath)				
 
 
 	try:
