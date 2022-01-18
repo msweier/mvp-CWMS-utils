@@ -107,7 +107,7 @@ def script_downloader(remote_repo, selection, appConfig):
 			fileSrcURL = '{}/{}/{}/{}'.format(remote_repo, appConfig['scripts'][selection]['remote_dir'], 'shared', fname)
 			fileDstPath = os.path.join(config_files_dir, fname)
 			if os.path.isfile(fileDstPath):
-				saveConfig = JOptionPane.showConfirmDialog(None,"Configuration file exists.\nOverwrite configuration file ?")
+				saveConfig = JOptionPane.showConfirmDialog(None,"Configuration file exists.\nIf overwritten local changes synced to master copy on gitHub will not be kept.\nOverwrite configuration file?")
 				if saveConfig==0:
 					download_file(fileSrcURL, fileDstPath)
 					downloaded_configs.append(fileDstPath)
