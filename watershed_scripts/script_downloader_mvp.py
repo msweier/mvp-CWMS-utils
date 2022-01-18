@@ -106,11 +106,13 @@ def script_downloader(remote_repo, selection, appConfig):
 		for fname in config_files:
 			fileSrcURL = '{}/{}/{}/{}'.format(remote_repo, appConfig['scripts'][selection]['remote_dir'], 'shared', fname)
 			fileDstPath = os.path.join(config_files_dir, fname)
-			if not os.path.isfile(fileDstPath):
-				download_file(fileSrcURL, fileDstPath)
-				downloaded_configs.append(fileDstPath)
-			else:
-				print 'Skipping download of config file: {}'.format(fname)
+			if os.path.isfile(fileDstPath):
+				saveConfig = JOptionPane.showConfirmDialog(None,"Configuration file exists.\nOverwrite configuration file ?")
+				if saveConfig==0:
+					download_file(fileSrcURL, fileDstPath)
+					downloaded_configs.append(fileDstPath)
+				else:
+					print 'Skipping download of config file: {}'.format(fname)
 
 
 	try:
@@ -242,7 +244,7 @@ def isScriptButtonAdded(filename):
 ################################################################################
 def main():
 
-	code_version = '13Dec2021'
+	code_version = '18Jan2022'
 	# Get the config file stored on Github.
 	# This allows new scripts to be added without this script needing to be replaced on every PC/Server Watershed
 
