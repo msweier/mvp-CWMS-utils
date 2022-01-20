@@ -1,0 +1,161 @@
+﻿watershed,LocationID,O_M_Responsibility,datum,Pool Elev. tsID,Second Pool Elev. tsID,Third Pool Elev. tsID,Discharge Tsid,Public_Name,Forecasted inflow TSID,Tailwater TSID,Stage Markers Stage Lables Line Color (; delimited and use | to add another set),"Flow Markers, Flow Lables, Line color (; delimited and use | to add another set)",Units,ElevationOrStage,USGS_ID,MVP_Hydrogrpher
+Rainy,LFKM5,USGS-IJC,,,,,,Little Fork River at Little Fk MN,,,,,,,05131500,
+Rainy,WRDM5,USGS-IJC,,,,,,Lake Of The Woods at Warroad MN,,,,,,,05140520 ,
+Rainy,BIFM5,USGS-IJC,,,,,,Big Fork River at Big Falls MN,,,,,,, 05132000 ,
+Rainy,CLKM5,USGS-IJC,,,,,,Vermilion River near Crane Lake MN,,,,,,,05129115,
+Souris,BoundaryRsvr,EnvCanada,,,,,,Boundary RSVR Diversion Canal,,,,,,,,
+Souris,GrandDevineLk,EnvCanada,,,,,,Moose Mnt Cr Ab Grant Devine Lk,,,,,,,,
+Souris,AlamedaRsvr,EnvCanada,,,,,,Alameda Reservoir near Alameda,,,,,,,,
+Souris,RCCM5,EnvCanada,,,,,,Boundary RSVR Diversion Canal,,,,,,,,
+Souris,Estevan,EnvCanada,,,,,,Long Creek near Estevan,,,,,,,,
+Souris,GrandDevineLk-Below,EnvCanada,,,,,,Moose Mnt Cr Bl Grant Devine Lk,,,,,,,,
+Souris,AlamedaRsvr-MooseMntCreek,EnvCanada,,,,,,Moose Mnt Creek a Alameda RSVR,,,,,,,,
+Souris,RaffertyRsvr,EnvCanada,,,,,,Rafferty Reservoir near Estevan,,,,,,,,
+Souris,RaffertyRsvr-SourisRiver,EnvCanada,,,,,,Souris River b Rafferty RSVR,,,,,,,,
+Miss Navigation,LockDam_04,MVP-inhouse,,,,,,Mississippi R Lock and Dam 04 (Pool),,,,,,,,Jesse Scott
+Miss Navigation,LockDam_04-Tailwater,MVP-inhouse,,,,,,Mississippi R Lock and Dam 04 (TW),,,,,,,,Jesse Scott
+Miss Navigation,AMAW3,MVP-inhouse,,,,,,Mississippi River near Alma WI (Kellogg MN),,,,,,,,Jesse Scott
+Miss Navigation,DKTM5,MVP-inhouse,,,,,,Mississippi River at Dakota MN,,,,,,,,Jesse Scott
+Miss Navigation,LockDam_01,MVP-inhouse,,,,,,Mississippi R Lock and Dam 01 (Pool),,,,,,,,Jesse Scott
+Miss Navigation,LockDam_01-Tailwater,MVP-inhouse,,,,,,Mississippi R Lock and Dam 01 (TW),,,,,,,,Jesse Scott
+Miss Navigation,LockDam_08,MVP-inhouse,,,,,,Mississippi R Lock and Dam 08 (Pool),,,,,,,,Jesse Scott
+Miss Navigation,LockDam_08-Tailwater,MVP-inhouse,,,,,,Mississippi R Lock and Dam 08 (TW),,,,,,,,Jesse Scott
+Miss Navigation,LockDam_10,MVP-inhouse,,,,,,Mississippi R Lock and Dam 10 (Pool),,,,,,,,Jesse Scott
+Miss Navigation,LockDam_10-Tailwater,MVP-inhouse,,,,,,Mississippi R Lock and Dam 10 (TW),,,,,,,,Jesse Scott
+Miss Navigation,LockDam_02,MVP-inhouse,,,,,,Mississippi R Lock and Dam 02 (Pool),,,,,,,,Jesse Scott
+Miss Navigation,LockDam_02-Tailwater,MVP-inhouse,,,,,,Mississippi R Lock and Dam 02 (TW),,,,,,,,Jesse Scott
+Miss Navigation,LACW3,MVP-inhouse,,,,,,Mississippi River at La Crosse WI,,,,,,,,Jesse Scott
+Miss Navigation,LockDam_07,MVP-inhouse,,,,,,Mississippi R Lock and Dam 07 (Pool),,,,,,,,Jesse Scott
+Miss Navigation,LockDam_07-Tailwater,MVP-inhouse,,,,,,Mississippi R Lock and Dam 07 (TW),,,,,,,,Jesse Scott
+Miss Navigation,LKCM5,MVP-inhouse,,,,,,Mississippi River at Lake City MN,,,,,,,,Jesse Scott
+Miss Navigation,LNSI4,MVP-inhouse,,,,,,Mississippi River at Lansing IA,,,,,,,,Jesse Scott
+Miss Navigation,LowerSAFalls,MVP-inhouse,,,,,,Lower St Anthony Falls (Pool),,,,,,,,Jesse Scott
+Miss Navigation,LowerSAFalls-Tailwater,MVP-inhouse,,,,,,Lower St Anthony Falls (TW),,,,,,,,Jesse Scott
+Miss Navigation,LockDam_09,MVP-inhouse,,,,,,Mississippi R Lock and Dam 09 (Pool),,,,,,,,Jesse Scott
+Miss Navigation,LockDam_09-Tailwater,MVP-inhouse,,,,,,Mississippi R Lock and Dam 09 (TW),,,,,,,,Jesse Scott
+Miss Navigation,LockDam_05,MVP-inhouse,,,,,,Mississippi R Lock and Dam 05 (Pool),,,,,,,,Jesse Scott
+Miss Navigation,LockDam_05-Tailwater,MVP-inhouse,,,,,,Mississippi R Lock and Dam 05 (TW),,,,,,,,Jesse Scott
+Miss Navigation,LockDam_03,MVP-inhouse,,,,,,Mississippi R Lock and Dam 03 (Pool),,,,,,,,Jesse Scott
+Miss Navigation,LockDam_03-Tailwater,MVP-inhouse,,,,,,Mississippi R Lock and Dam 03 (TW),,,,,,,,Jesse Scott
+Minnesota,SAVM5,MVP-inhouse,,,,,,Minnesota River at Savage MN,,,,,,,,Jesse Scott
+Miss Navigation,SSPM5,MVP-inhouse,,,,,,Mississippi River at South St. Paul MN,,,,,,,,Jesse Scott
+StCroix,STLM5,MVP-inhouse,,,,,,St. Croix River at Stillwater MN,,,,,,,05341550,Jesse Scott
+Miss Navigation,EauGalle_Dam ,MVP-inhouse,,,,,,Eau Galle Dam,,,,,,,,Jesse Scott
+Miss Navigation,LockDam_06,MVP-inhouse,,,,,,Mississippi R Lock and Dam 06 (Pool),,,,,,,,Jesse Scott
+Miss Navigation,LockDam_06-Tailwater,MVP-inhouse,,,,,,Mississippi R Lock and Dam 06 (TW),,,,,,,,Jesse Scott
+Miss Navigation,UpperSAFalls,MVP-inhouse,,,,,,Upper St. Anthony Falls,,,,,,,,Jesse Scott
+Miss Navigation,WABM5,MVP-inhouse,,,,,,Mississippi River at Wabasha MN,,,,,,,,Jesse Scott
+Miss Navigation,LockDam_05a,MVP-inhouse,,,,,,Mississippi R Lock and Dam 05a (Pool),,,,,,,,Jesse Scott
+Miss Navigation,LockDam_05a-Tailwater,MVP-inhouse,,,,,,Mississippi R Lock and Dam 05a (TW),,,,,,,,Jesse Scott
+Rainy,CNLM5,MVP-inhouse,,,,,,Crane Lake at Crane Lake MN,,,,,,,,Jesse Scott
+Miss Navigation,MissHW_PineRiver-Tailwater,MVP-inhouse,,,,,,Mississippi River Headwaters Pine River Dam (TW) at Cross Lake MN,,,,,,,,Jesse Scott
+Miss Navigation,MissHW_PineRiver,MVP-inhouse,,,,,,Mississippi River Headwaters Pine River Dam at Cross Lake MN,,,,,,,,Jesse Scott
+Miss Navigation,MissHW_Leech-Tailwater,MVP-inhouse,,,,,,Leech Lake (TW),,,,,,,,Jesse Scott
+Miss Navigation,MissHW_Leech,MVP-inhouse,,,,,,Mississippi River Headwaters at Leech Lake Dam at Federal Dam MN,,,,,,,,Jesse Scott
+Miss Navigation,FTRM5,MVP-inhouse,,,,,,Mississippi River at Fort Ripley MN,,,,,,,,Jesse Scott
+Miss Navigation,MissHW_Gull-Lake,MVP-inhouse,,,,,,Gull Lake near Brainerd MN,,,,,,,,Jesse Scott
+Miss Navigation,MissHW_Gull-Tailwater,MVP-inhouse,,,,,,Gull Lake Dam (TW),,,,,,,,Jesse Scott
+Miss Navigation,MissHW_Gull,MVP-inhouse,,,,,,Mississippi River Headwaters Gull Lake Dam near Brainerd MN,,,,,,,,Jesse Scott
+StCroix,GTBW3,MVP-inhouse,,,,,,St. Croix River near Grantsburg WI,,,,,,,,Jesse Scott
+Miss Navigation,KnutsonDam,MVP-inhouse,,,,,,Knutson Dam on Cass Lake MN,,,,,,,,Jesse Scott
+Miss Navigation,KnutsonDam-Tailwater,MVP-inhouse,,,,,,Knutson Dam (TW),,,,,,,,Jesse Scott
+Miss Navigation,MudGooseDam,MVP-inhouse,,,,,,Leech Lake River above Mud Lake Goose Dam near Ball Club MN (Pool),,,,,,,,Jesse Scott
+Miss Navigation,MudGooseDam-Tailwater,MVP-inhouse,,,,,,Leech Lake River above Mud Lake Goose Dam near Ball Club MN (TW),,,,,,,,Jesse Scott
+Miss Navigation,MissHW_Pokegama,MVP-inhouse,,,,,,Pokegama Dam (Pool),,,,,,,,Jesse Scott
+Miss Navigation,MissHW_Pokegama-Tailwater,MVP-inhouse,,,,,,Pokegama Lake (TW),,,,,,,,Jesse Scott
+Miss Navigation,MissHW_Pokegama-Lake,MVP-inhouse,,,,,,Pokegama Lake - Lake,,,,,,,,Jesse Scott
+Miss Navigation,MissHW_Sandy-Tailwater,MVP-inhouse,,,,,,Sandy Lake (TW),,,,,,,,Jesse Scott
+Miss Navigation,MissHW_Sandy,MVP-inhouse,,,,,,Big Sandy Lake Dam MN,,,,,,,,Jesse Scott
+Miss Navigation,MissHW_Winni-Tailwater,MVP-inhouse,,,,,,Lake Winnibigoshish (TW),,,,,,,,Jesse Scott
+Miss Navigation,MissHW_Winni,MVP-inhouse,,,,,,Lake Winnibigoshish Dam nr Bena MN,,,,,,,,Jesse Scott
+Red River,DMTM5,MVP-inhouse,,,,,,West Branch Twelve Mile Ck at Dumont MN,,,,,,,,John Fromuth
+Red River,DUMM5,MVP-inhouse,,,,,,Twelve Mile Creek near Dumont MN,,,,,,,,John Fromuth
+Red River,HRMM5,MVP-inhouse,,,,,,Five Mile Creek near Herman MN,,,,,,,055033001,John Fromuth
+Red River,JAHM5,MVP-inhouse,,,,,,Rabbit River near Campbell MN,,,,,,,05051200,John Fromuth
+Minnesota,LacQuiParle_Dam,MVP-inhouse,,,,,,Lac qui Parle Reservoir near Watson MN (pool),,,,,,,,John Fromuth
+Minnesota,LacQuiParle_Dam-Lake,MVP-inhouse,,,,,,Lac Qui Parle at Hwy 40 Bridge near Milan MN (Dam-Lake),,,,,,,,John Fromuth
+Minnesota,MarshLake_Dam,MVP-inhouse,,,,,,Minnesota River at Marsh Lake Dam near Appleton MN,,,,,,,,John Fromuth
+Minnesota,MarshLake_Dam-Tailwater,MVP-inhouse,,,,,,Minnesota River below Marsh Lake Dam (TW),,,,,,,,John Fromuth
+Red River,NCMM5,MVP-inhouse,,,,,,Mustinka River near Norcross MN,,,,,,,055044003,John Fromuth
+Minnesota,Highway75_Dam-LowFlow,MVP-inhouse,,,,,,Minnesota River at Highway 75 Dam MN (Highway75_Dam (Low Flow Outlet Pool),,,,,,,,John Fromuth
+Minnesota,Highway75_Dam-LowFlow-Tailwater,MVP-inhouse,,,,,,Minnesota River at Highway 75 Dam MN (Highway75_Dam (Low Flow Outlet TW),,,,,,,,John Fromuth
+Minnesota,Highway75_Dam-ServiceSpillway,MVP-inhouse,,,,,,Minnesota River near Odessa MN (Highway75_Dam Service Spillway Pool),,,,,,,,John Fromuth
+Red River,Orwell_Dam,MVP-inhouse,,,,,,Orwell Lake at Orwell Dam near Fergus Falls MN,,,,,,,05045950,John Fromuth
+Minnesota,WatsonSag_Dam,MVP-inhouse,,,,,,Chippewa River Diversion at Watson Sag Weir (Pool),,,,,,,05304980,John Fromuth
+Minnesota,WatsonSag_Dam-Tailwater,MVP-inhouse,,,,,,Chippewa River Diversion at Watson Sag Weir (TW),,,,,,,,John Fromuth
+Red River,TMCM5,MVP-inhouse,,,,,,Twelve Mile Creek near Wheaton MN,,,,,,,055065001,John Fromuth
+Minnesota,LacQuiParle_Dam-Tailwater,USGS,,,,,,Minnesota River near Lac qui Parle Dam_Reservoir near Watson MN (tailwater),,,,,,,05301000,
+Red River,DBCN8,USGS,,,,,,Baldhill Creek nr Dazey ND,,,,,,,05057200,
+Miss Navigation,BallClub,USGS,,,,,,Mississippi River at Ball Club MN,,,,,,,05207600,
+Red River,BLDN8,USGS,,,,,,Lake Ashtabula_Sheyenne River at Baldhill Dam ND,,,,,,,,
+Miss Navigation,GALW3,USGS,,,,,,Black River near Galesville WI,,,,,,,05382000,
+Red River,DORM5,USGS,,,,,,Bois de Sioux River near Doran MN,,,,,,,05051300,
+Minnesota,ChippewaDiv_Dam,USGS,,,,,,Chippewa River Div. Dam (HW) near Watson MN,,,,,,,05304995,
+Miss Navigation,DURW3,USGS,,,,,,Chippewa River at Durand WI,,,,,,,05369500,
+Minnesota,MLNM5,USGS,,,,,,Chippewa River near Milan MN,,,,,,,05304500,
+Minnesota,ChippewaDiv_Dam-Tailwater,USGS,,,,,,Chippewa River Diversion Dam near Watson MN (Tailwater),,,,,,,05305000,
+Souris,DESN8,USGS,,,,,,Des Lacs River at Foxholm ND,,,,,,,05116500,
+Miss Navigation,SPRW3,USGS,,,,,,Eau Galle River at Spring Valley WI,,,,,,,05370000,
+Red River,HOMN8,USGS,,,,,,Homme Reservoir nr Park River ND,,,,,,,05088500,
+Miss Navigation,STEW3,USGS,,,,,,Kickapoo River at Steuben WI,,,,,,,05410490,
+Souris,DARN8,USGS,,,,,,Lake Darling Dam,,,,,,,05115500,
+Miss Navigation,MissHW_Leech-Lake,USGS,,,,,,Leech Lake at Sugar Point MN,,,,,,,05205900,
+Minnesota,JDNM5,USGS,,,,,,Minnesota River at Jordan MN,,,,,,,05330000,
+Minnesota,MVOM5,USGS,,,,,,Minnesota River at Montivideo MN,,,,,,,05311000,
+Minnesota,ORTM5,USGS,,,,,,Minnesota River at Ortonville MN,,,,,,,05292000,
+Miss Navigation,DAYM5,USGS,,,,,,Miss River at Days Highlanding MN,,,,,,,05210000,
+Miss Navigation,ATKM5,USGS,,,,,,Miss River near Aitkin MN,,,,,,,05227500,
+Miss Navigation,BRWM5,USGS,,,,,,Mississippi River near Brownsville MN,,,,,,,05210000,
+Miss Navigation,WILM5,USGS,,,,,,Miss River near Willow Beach MN,,,,,,,05207600,
+Miss Navigation,CLAI4,USGS,,,,,,Mississippi River at Clayton IA,,,,,,,05411500,
+Miss Navigation,MCGI4,USGS,,,,,,Mississippi River at McGregor IA,,,,,,,,
+Miss Navigation,WNAM5,USGS,,,,,,Mississippi River at Winona MN,,,,,,,05378500,
+Red River,WEAM5,USGS,,,,,,Mustinka River at Wheaton MN,,,,,,,05049000,
+Red River,OTRM5,USGS,,,,,,Otter Tail River Bl Orwell Dam (tailwater) Nr Fergus Falls MN,,,,,,,05046000,
+Red River,OTDIV,USGS,,,,,,Otter Tail River Diversion at Breckenridge MN,,,,,,,05046475,
+Minnesota,APPM5,USGS,,,,,,Pomme de Terre River Appleton MN,,,,,,,05294000,
+Red River,RRDM5,USGS,,,,,,Lower Red Lake nr Red Lake MN,,,,,,,05074000,
+Red River,RRDM5,USGS,,,,,,Red Lake River near Red Lake Dam Tailwater,,,,,,,05074500,
+Red River,SAUM5,USGS,,,,,,Lower Red Lake at Mouth Battle River nr Saum MN,,,,,,,05073650,
+Red River,CRKM5,USGS,,,,,,Red Lake River at Crookston MN,,,,,,,05079000,
+Red River,HIGM5,USGS,,,,,,Red Lake River at High Landing MN,,,,,,,05075000,
+Red River,DRTN8,USGS,,,,,,Red River North at Drayton ND,,,,,,,05092000,
+Red River,ENLN8,USGS,,,,,,Red River of the North at Enloe ND,,,,,,,0505152130,
+Red River,TraverseRES_Dam,USGS,,,,,,Lake Traverse at Reservation Dam,,,,,,,05049700,
+Red River,TraverseRES_Dam-Tailwater,USGS,,,,,,Lake Traverse at Reservation Dam Tailwater,,,,,,,05049700,
+Miss Navigation,HOUM5,USGS,,,,,,Root River at Houston MN,,,,,,,05288580,
+Red River,CPRN8,USGS,,,,,,Sheyenne River near Cooperstown ND,,,,,,,05057000,
+Red River,VCRN8,USGS,,,,,,Sheyenne River at Valley City ND,,,,,,,05058500,
+Red River,BHTN8,USGS,,,,,,Sheyenne River below Baldhill Dam (Tailwater),,,,,,,05058000,
+Red River,WRWN8,USGS,,,,,,Sheyenne River near Warwick ND,,,,,,,05056000,
+Souris,Minot-4NW,USGS,,,,,,Souris River at Minot 4NW,,,,,,,05117500,
+Souris,LakeDarling-SourisRiver,USGS,,,,,,Souris River below Lake Darling,,,,,,,05115500,
+Souris,FOXN8,USGS,,,,,,Souris River nr Foxholm ND,,,,,,,05116000,
+Souris,SHWN8,USGS,,,,,,Souris River nr Sherwood ND,,,,,,,05114000,
+Souris,VRNN8,USGS,,,,,,Souris River nr Verendrye ND,,,,,,,05114000,
+Souris,WSTN8,USGS,,,,,,Souris River nr Westhope ND,,,,,,,05124000,
+Miss Navigation,HUSM5,USGS,,,,,,South Fk Root River at Houston MN,,,,,,,05385500,
+Miss Navigation,DDGW3,USGS,,,,,,Trempealeau River at Dodge WI,,,,,,,05379500,
+Miss Navigation,DCHI4,USGS,,,,,,Upper Iowa River at Dorchester IA,,,,,,,05388250,
+Red River,WSKM5,USGS,,,,,,Upper Red Lake at Waskish MN,,,,,,,05073500,
+Red River,TraverseWR_Dam-Lake,USGS,,,,,,Mud Lake above White Rock Dam near White Rock SD,,,,,,,05049995,
+Red River,WHRM5,USGS,,,,,,Bois De Sioux River near White Rock SD,,,,,,,05050000,
+Red River,WHRM5,USGS,,,,,,Bois De Sioux River near White Rock Dam SD Tailwater,,,,,,,05050000,
+Miss Navigation,MUSW3,USGS,,,,,,Wisconsin River at Muscoda WI,,,,,,,05407000,
+Minnesota,ODSM5,USGS,,,,,,Yellow Bank River near Odessa MN,,,,,,,05293000,
+Miss Navigation,ZUMM5,USGS,,,,,,Zumbro River at Zumbro Falls MN,,,,,,,05374000,
+Minnesota,LQPM5,USGS,,,,,,Lac Qui Parle River near Lac Qui Parle MN,,,,,,,05300000,
+Rainy,SSIM5,USGS,,,,,,Lake Of The Woods at Springsteel Island near Warroad MN,,,,,,,05140521,
+Red River,BRMN8,USGS,,,,,,Sheyenne R Bl Devils Lk State Outlet Nr Bremen ND,,,,,,,05055400,
+Red River,FLRN8,USGS,,,,,,Sheyenne R Ab Devils Lk State Outlet Nr Flora ND,,,,,,,05055300,
+StCroix,PREW3,USGS,,,,,,Mississippi River at Prescott WI,,,,,,,,
+Miss Navigation,STPM5,USGS,,,,,,Mississippi River at St Paul MN,,,,,,,05331000,
+Red River,ELZM5,USGS,,,,,,Otter Tail River near Elizabeth MN,,,,,,,05030500,
+Red River,GRNN8,USGS,,,,,,Park River at Grafton ND,,,,,,,05090000,
+Red River,WHNN8,USGS,,,,,,Red River North at Wahpeton ND,,,,,,,05051500,
+Red River,FGON8,USGS,,,,,,Red River of the North at Fargo ND,,,,,,,05054000,
+Red River,GOLN8,USGS,,,,,,Sheyenne Riv at Gol nr Kindred ND,,,,,,,05058980,
+Red River,HVYN8,USGS,,,,,,Sheyenne River above Harvey ND,,,,,,,05054500,
+Red River,LBNN8,USGS,,,,,,Sheyenne River at Lisbon ND,,,,,,,05058700,
+Red River,KNDN8,USGS,,,,,,Sheyenne River near Kindred ND,,,,,,,05059000,
+Red River,TOLN8,USGS,,,,,,Tolna Coulee near Tolna ND,,,,,,,05056678,
