@@ -14,6 +14,13 @@
       "help_url": null,
       "config_files": ["projectDBplotInputs.csv"]
     },
+    "MVP Gage Plot DB": {
+      "remote_dir": "watershed_scripts",
+      "filename": "mvpGageProjectsDbPlot.py",
+      "update_libs": true,
+      "help_url": null,
+      "config_files": ["gageDBplotInputs.csv"]
+    },
     "Gate Entry": {
       "remote_dir": "watershed_scripts",
       "filename": "gateEntry.py",
