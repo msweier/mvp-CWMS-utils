@@ -96,8 +96,8 @@ filePath = os.path.join(
     'projectDBplotInputs.csv'
     )
 print(filePath)
-daysToLookBack = 7
-daysToLookForward = 5
+daysToLookBack = 10
+daysToLookForward = 7
 
 #############################
 #dictionary we will put stuff in from input file
@@ -132,7 +132,6 @@ if watershedName:
 
 		params = dataDict[watershedName][projectName]
 		datum, poolLevelTsID, poolLevel2TsID, poolLevel3TsID, outflowTsID, inflowTsID, forecastedInflowTsID, tailwaterLevelTsID, stageMarkers, flowMarkers, units, elevationOrStage = params
-		
 		
 		# Determine Script Context
 		isClient = hec.lang.ClientAppCheck.haveClientApp()
@@ -197,6 +196,7 @@ if watershedName:
 		for outflowMeasTsID in outflowMeasTsIdList:
 			outflowMeas = getDataIfExists(outflowMeasTsID)
 			if outflowMeas:
+				print(outflowMeas)
 				break
 		
 		
@@ -350,7 +350,7 @@ if watershedName:
 			## plot marker bands
 			try:
 				for a in stageMarkers.split("|"):
-					print(a)
+					
 					num, comment, color =  a.split(';')
 					markerBand(str(num),comment.strip(), plot.getViewport(poolLevel.getData()), color.strip())
 			except NameError:
@@ -361,7 +361,7 @@ if watershedName:
 			try:
 				for a in flowMarkers.split("|"):
 					num, comment, color =  a.split(';')
-					markerBand(str(num),comment.strip(), plot.getViewport(flow.getData()), color.strip())
+					markerBand(str(num),comment.strip(), plot.getViewport(outflow.getData()), color.strip())
 			except NameError:
 				print("flowMarkers not defined")
 		
