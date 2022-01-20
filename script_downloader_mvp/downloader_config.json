@@ -16,7 +16,7 @@
     },
     "MVP Gage Plot DB": {
       "remote_dir": "watershed_scripts",
-      "filename": "mvpGageProjectsDbPlot.py",
+      "filename": "mvpGageDbPlot.py",
       "update_libs": true,
       "help_url": null,
       "config_files": ["gageDBplotInputs.csv"]
