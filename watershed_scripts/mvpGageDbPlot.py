@@ -211,8 +211,8 @@ if watershedName:
 				if outflow:
 					break
 		# get outflow manual measurment
-		outflowMeasTsIdList = ['{}-Tailwater.Flow.Inst.0.0.Raw-USGS'.format(projectName),
-					'{}-Tailwater.Flow.Inst.0.0.Raw-CEMVP'.format(projectName),]
+		outflowMeasTsIdList = ['{}.Flow.Inst.0.0.Raw-USGS'.format(projectName),
+					'{}.Flow.Inst.0.0.Raw-CEMVP'.format(projectName),]
 		for outflowMeasTsID in outflowMeasTsIdList:
 			outflowMeas = getDataIfExists(outflowMeasTsID)
 			if outflowMeas:
