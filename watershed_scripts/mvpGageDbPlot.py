@@ -7,6 +7,8 @@ from javax.swing import JOptionPane, JTextArea, JScrollPane
 from collections import OrderedDict
 from hec.cwmsVue import CwmsListSelection
 from hec.script import AxisMarker
+# Add rtsutils package to sys.path before importing
+sys.path.append(os.path.join(os.environ['APPDATA'], "rsgis"))
 
 def pathParser(dssPath):
     blank, aPart, bPart, cPart, dPart, ePart, fPart, blank2 = dssPath.split('/')
