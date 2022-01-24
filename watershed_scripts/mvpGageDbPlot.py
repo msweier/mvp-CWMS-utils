@@ -264,7 +264,7 @@ if watershedName:
 			stageView = layout.addViewport(.34)
 			stageTailView = layout.addViewport(.33)
 			flowView = layout.addViewport(.33)
-		elif outflow is None:
+		elif outflow is None and forecastedInflow is None:
 			stageView = layout.addViewport(1)
 			
 			
