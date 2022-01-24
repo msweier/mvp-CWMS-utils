@@ -10,7 +10,7 @@ from hec.script import AxisMarker
 try:
 # Add rtsutils package to sys.path before importing
     sys.path.append(os.path.join(os.environ['APPDATA'], "rsgis"))
-    from rtsutils import cavistatus, usgs
+    from rtsutils import cavistatus
 except ImportError, ex:
     raise
 
