@@ -7,8 +7,12 @@ from javax.swing import JOptionPane, JTextArea, JScrollPane
 from collections import OrderedDict
 from hec.cwmsVue import CwmsListSelection
 from hec.script import AxisMarker
+try:
 # Add rtsutils package to sys.path before importing
-sys.path.append(os.path.join(os.environ['APPDATA'], "rsgis"))
+    sys.path.append(os.path.join(os.environ['APPDATA'], "rsgis"))
+    from rtsutils import cavistatus, usgs
+except ImportError, ex:
+    raise
 
 def pathParser(dssPath):
     blank, aPart, bPart, cPart, dPart, ePart, fPart, blank2 = dssPath.split('/')
@@ -84,12 +88,7 @@ def lastValidDateString(tsData):
 	print(lastTime.dateAndTime(104))
 	return lastTime.dateAndTime(104)
 
-try:
-# Add rtsutils package to sys.path before importing
-    sys.path.append(os.path.join(os.environ['APPDATA'], "rsgis"))
-    from rtsutils import cavistatus, usgs
-except ImportError, ex:
-    raise
+
 
 ##read imputs from file
 
