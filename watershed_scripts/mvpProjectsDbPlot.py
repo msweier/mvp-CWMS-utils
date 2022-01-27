@@ -485,7 +485,7 @@ class mvpProjectPlotter:
 				'PREW3' : 675.00,
 				'WABM5' : 667.00,
 				'AMAW3' : 660.00,
-				'LockDam_05-tailwater' : 651.00,
+				'LockDam_05-Tailwater' : 651.00,
 				'WNAM5' : 645.50,
 				'LACW3' : 631.00,
 				'LNSI4' : 620.00,
@@ -501,7 +501,7 @@ class mvpProjectPlotter:
 		elif loc == 'LockDam_10':
 			self.markerBand(upperBand, 'Top of Primary', viewport, 'blue',  linestyle)
 			self.markerBand(lowerBand, 'Bottom of Primary', viewport, 'blue',  linestyle)		
-		elif 'LockDam' in loc:
+		elif 'LockDam' in loc and 'Tailwater' not in loc:
 			self.markerBand(upperBand, 'Top of Secondary', viewport, 'blue',  linestyle)
 			self.markerBand(lowerBand, 'Bottom of Secondary', viewport, 'blue',  linestyle)
 		else:
