@@ -161,10 +161,10 @@ class mvpProjectPlotter:
 		
 		self.db.setTimeZone('UTC')
 		# Get Observed Data from CWMS Database
-		cal = Calendar.getInstance()
-		cal.setTimeZone(TimeZone.getTimeZone('UTC'))
-		cal.setTimeInMillis(System.currentTimeMillis())
-		t = HecTime(cal)
+		self.cal = Calendar.getInstance()
+		self.cal.setTimeZone(TimeZone.getTimeZone('UTC'))
+		self.cal.setTimeInMillis(System.currentTimeMillis())
+		t = HecTime(self.cal)
 		curTime = t.dateAndTime(104)
 		t.subtractDays(self.lookBackDays)
 		startTime = t.dateAndTime(104)
@@ -262,8 +262,7 @@ class mvpProjectPlotter:
 		self.db.close()
 		
 		# Configure Plot Layout
-		plotName = "{}".format(projectName)
-		
+		plotName = "{}".format(projectName)	
 		try:
 			plotName+="\nPool Level {} ft at {} \n Outflow {} cfs ".format(round(poolLevel.lastValidValue(),2),
 			self.lastValidDateString(poolLevel), round(outflow.lastValidValue()))
@@ -466,7 +465,7 @@ class mvpProjectPlotter:
 	
 	def lastValidDateString(self, tsData):
 		intTime = tsData.lastValidDate()
-		lastTime = HecTime(cal)
+		lastTime = HecTime(self.cal)
 		lastTime.set(intTime)
 		return lastTime.dateAndTime(104)
 	def lockDamBand(self, tsid, viewport, bandwith, linestyle):
