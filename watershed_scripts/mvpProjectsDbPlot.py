@@ -143,12 +143,104 @@ class mvpProjectPlotter:
 					self.plotFunct(event, watershedName, projectName)
 
 					
+	def markerBand(self, value, label, viewport, color, linestyle):
+	    '''
+	    Adds a horizontal marker to plot viewport
+	    '''
+	    mb = AxisMarker()
+	    mb.value = value
+	    mb.labelText = label
+	    mb.labelFont = "Arial,Bold,12"
+	    mb.labelColor = 'gray'
+	    mb.lineColor = color
+	    mb.lineWidth = 2.5
+	    mb.lineStyle = linestyle
+	    mb.labelPosition = 'below'
+	    viewport.addAxisMarker(mb)
+	    return mb
+	def curveFormatter(self, plot, dataset, lineColor, lineWidth, legendText, lineStyle, fillCurveType):
+		'''
+		Formats curves (color, width, style)
+		'''
+		curve = plot.getCurve(dataset)
+		curve.setLineColor(lineColor)
+		curve.setLineWidth(lineWidth)
+		try:
+			curve.setLineStyle(lineStyle)
+		except:
+			print('could not setLinStyle',dataset)
+		label = plot.getLegendLabel(dataset)
+		label.setText(legendText)
+		if fillCurveType == "above":
+			curve.setFillColor(lineColor)
+			curve.setFillPattern("diagonal cross")
+			curve.setFillType("above")
+		elif fillCurveType == "below":
+			curve.setFillColor(lineColor)
+			curve.setFillPattern("diagonal cross")
+			curve.setFillType("below")
+		return curve
+	def getDataIfExists(self, tsID):
+		try:
+			data = self.db.read(tsID)
+			if self.units == 'metric':
+				print('convert to metric')
+				print(data.getUnits())
+				data = data.convertToMetricUnits()
+				print(data.getUnits())
+			return data
+		except:
+			print('Error: Data in {} does not exists for time window'.format(tsID))
 	
+	def lastValidDateString(self, tsData):
+		intTime = tsData.lastValidDate()
+		lastTime = HecTime(self.cal)
+		lastTime.set(intTime)
+		return lastTime.dateAndTime(104)
+	def lockDamBand(self, tsid, viewport, bandwith, linestyle):
+		# Dictionaries
+		centerOfBand = {'LockDam_02' : 686.50,
+				'LockDam_03' : 674.00,
+				'LockDam_04' : 666.50,
+				'LockDam_05' : 659.50,
+				'LockDam_05a' : 650.00,
+				'LockDam_06' : 644.50,
+				'LockDam_07' : 639.00,
+				'LockDam_08' : 630.00,
+				'LockDam_09' : 619.00,
+				'LockDam_10' : 611.00,
+				'SSPM5' : 687.20,
+				'PREW3' : 675.00,
+				'WABM5' : 667.00,
+				'AMAW3' : 660.00,
+				'LockDam_05-Tailwater' : 651.00,
+				'WNAM5' : 645.50,
+				'LACW3' : 631.00,
+				'LNSI4' : 620.00,
+				'CLAI4' : 611.8}
+		loc = tsid.split('.')[0]
+		centerOfBand = centerOfBand[loc]
+
+		upperBand = str(centerOfBand+bandwith)
+		lowerBand = str(centerOfBand-bandwith)
+
+		if loc == 'CLAI4':
+			self.markerBand(str(centerOfBand), 'Secondary Control - Clayton', viewport, 'red',  linestyle)
+		elif loc == 'LockDam_10':
+			self.markerBand(upperBand, 'Top of Primary', viewport, 'blue',  linestyle)
+			self.markerBand(lowerBand, 'Bottom of Primary', viewport, 'blue',  linestyle)		
+		elif 'LockDam' in loc and 'Tailwater' not in loc:
+			self.markerBand(upperBand, 'Top of Secondary', viewport, 'blue',  linestyle)
+			self.markerBand(lowerBand, 'Bottom of Secondary', viewport, 'blue',  linestyle)
+		else:
+			self.markerBand(upperBand, 'Top of Primary', viewport, 'red',  linestyle)
+			self.markerBand(lowerBand, 'Bottom of Primary', viewport, 'red', linestyle)			
 	
 	def plotFunct(self, event, watershedName, projectName):	
 		params = self.dataDict[watershedName][projectName]
-		datum, poolLevelTsID, poolLevel2TsID, poolLevel3TsID, outflowTsID, inflowTsID, forecastedInflowTsID, tailwaterLevelTsID, stageMarkers, flowMarkers, units, elevationOrStage = params
+		datum, poolLevelTsID, poolLevel2TsID, poolLevel3TsID, outflowTsID, inflowTsID, forecastedInflowTsID, tailwaterLevelTsID, stageMarkers, flowMarkers, self.units, elevationOrStage = params
 
+		
 		#plot band if its a lock and dam
 		bandwidth = 0.3
 		# Determine Script Context
@@ -264,8 +356,9 @@ class mvpProjectPlotter:
 		# Configure Plot Layout
 		plotName = "{}".format(projectName)	
 		try:
-			plotName+="\nPool Level {} ft at {} \n Outflow {} cfs ".format(round(poolLevel.lastValidValue(),2),
-			self.lastValidDateString(poolLevel), round(outflow.lastValidValue()))
+			plotName+="\nPool Level {} {} at {} \n Outflow {} {} ".format(round(poolLevel.lastValidValue(),2),
+			poolLevel.getUnits(), self.lastValidDateString(poolLevel), round(outflow.lastValidValue()),
+			outflow.getUnits())
 		except:
 			pass	
 		plot = Plot.newPlot(plotName)
@@ -321,13 +414,13 @@ class mvpProjectPlotter:
 	
 		if poolLevel is not None:
 			if elevationOrStage:
-				plot.getViewport(poolLevel.getData()).getAxis('Y1').setLabel('Pool Elevation, ft {}'.format(datum))
+				plot.getViewport(poolLevel.getData()).getAxis('Y1').setLabel('Pool Elevation, {} {}'.format(poolLevel.getUnits(),datum))
 			else:
-				plot.getViewport(poolLevel.getData()).getAxis('Y1').setLabel('Pool Level, ft')
+				plot.getViewport(poolLevel.getData()).getAxis('Y1').setLabel('Pool Level, {}'.format(poolLevel.getUnits()))
 		if tailwaterLevel is not None:
-			plot.getViewport(taildata).getAxis('Y1').setLabel('Tailwater Level, ft')
+			plot.getViewport(taildata).getAxis('Y1').setLabel('Tailwater Level')
 		if outflow	is not None:
-			plot.getViewport(outflow.getData()).getAxis('Y1').setLabel('Flow, cfs')
+			plot.getViewport(outflow.getData()).getAxis('Y1').setLabel('Flow, {}'.format(outflow.getUnits()))
 		# Create Plot Title Text
 		plotTitle = plot.getPlotTitle()
 		plotTitle.setText(plotName)
@@ -417,95 +510,9 @@ class mvpProjectPlotter:
 			except NameError:
 				print("flowMarkers not defined")
 		
-		del(datum, poolLevelTsID, poolLevel2TsID, poolLevel3TsID, outflowTsID, inflowTsID, forecastedInflowTsID, tailwaterLevelTsID, stageMarkers, flowMarkers, units, elevationOrStage)  	
+		del(datum, poolLevelTsID, poolLevel2TsID, poolLevel3TsID, outflowTsID, inflowTsID, forecastedInflowTsID, tailwaterLevelTsID, stageMarkers, flowMarkers, elevationOrStage)  	
 
-	def markerBand(self, value, label, viewport, color, linestyle):
-	    '''
-	    Adds a horizontal marker to plot viewport
-	    '''
-	    mb = AxisMarker()
-	    mb.value = value
-	    mb.labelText = label
-	    mb.labelFont = "Arial,Bold,12"
-	    mb.labelColor = 'gray'
-	    mb.lineColor = color
-	    mb.lineWidth = 2.5
-	    mb.lineStyle = linestyle
-	    mb.labelPosition = 'below'
-	    viewport.addAxisMarker(mb)
-	    return mb
-	def curveFormatter(self, plot, dataset, lineColor, lineWidth, legendText, lineStyle, fillCurveType):
-		'''
-		Formats curves (color, width, style)
-		'''
-		curve = plot.getCurve(dataset)
-		curve.setLineColor(lineColor)
-		curve.setLineWidth(lineWidth)
-		try:
-			curve.setLineStyle(lineStyle)
-		except:
-			print('could not setLinStyle',dataset)
-		label = plot.getLegendLabel(dataset)
-		label.setText(legendText)
-		if fillCurveType == "above":
-			curve.setFillColor(lineColor)
-			curve.setFillPattern("diagonal cross")
-			curve.setFillType("above")
-		elif fillCurveType == "below":
-			curve.setFillColor(lineColor)
-			curve.setFillPattern("diagonal cross")
-			curve.setFillType("below")
-		return curve
-	def getDataIfExists(self, tsID):
-		try:
-			data = self.db.read(tsID)
-			return data
-		except:
-			print('Error: Data in {} does not exists for time window'.format(tsID))
 	
-	def lastValidDateString(self, tsData):
-		intTime = tsData.lastValidDate()
-		lastTime = HecTime(self.cal)
-		lastTime.set(intTime)
-		return lastTime.dateAndTime(104)
-	def lockDamBand(self, tsid, viewport, bandwith, linestyle):
-		# Dictionaries
-		centerOfBand = {'LockDam_02' : 686.50,
-				'LockDam_03' : 674.00,
-				'LockDam_04' : 666.50,
-				'LockDam_05' : 659.50,
-				'LockDam_05a' : 650.00,
-				'LockDam_06' : 644.50,
-				'LockDam_07' : 639.00,
-				'LockDam_08' : 630.00,
-				'LockDam_09' : 619.00,
-				'LockDam_10' : 611.00,
-				'SSPM5' : 687.20,
-				'PREW3' : 675.00,
-				'WABM5' : 667.00,
-				'AMAW3' : 660.00,
-				'LockDam_05-Tailwater' : 651.00,
-				'WNAM5' : 645.50,
-				'LACW3' : 631.00,
-				'LNSI4' : 620.00,
-				'CLAI4' : 611.8}
-		loc = tsid.split('.')[0]
-		centerOfBand = centerOfBand[loc]
-
-		upperBand = str(centerOfBand+bandwith)
-		lowerBand = str(centerOfBand-bandwith)
-
-		if loc == 'CLAI4':
-			self.markerBand(str(centerOfBand), 'Secondary Control - Clayton', viewport, 'red',  linestyle)
-		elif loc == 'LockDam_10':
-			self.markerBand(upperBand, 'Top of Primary', viewport, 'blue',  linestyle)
-			self.markerBand(lowerBand, 'Bottom of Primary', viewport, 'blue',  linestyle)		
-		elif 'LockDam' in loc and 'Tailwater' not in loc:
-			self.markerBand(upperBand, 'Top of Secondary', viewport, 'blue',  linestyle)
-			self.markerBand(lowerBand, 'Bottom of Secondary', viewport, 'blue',  linestyle)
-		else:
-			self.markerBand(upperBand, 'Top of Primary', viewport, 'red',  linestyle)
-			self.markerBand(lowerBand, 'Bottom of Primary', viewport, 'red', linestyle)			
 
 			
 if __name__ == '__main__':
