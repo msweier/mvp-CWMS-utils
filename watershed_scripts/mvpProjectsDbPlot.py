@@ -138,7 +138,7 @@ class mvpProjectPlotter:
 			self.frame.dispose()
 			#walkthrough and plot
 			for watershedName in watershedDict.keys():
-				for projectName in reversed(watershedDict[watershedName]):
+				for projectName in watershedDict[watershedName]:
 					print('Plotting ', projectName)
 					self.plotFunct(event, watershedName, projectName)
 
@@ -337,19 +337,21 @@ class mvpProjectPlotter:
 			inflow = None
 		
 		##get forecasted inflow
-		if 'LockDam' not in poolLevelTsID:
-			self.db.setTimeWindow(curTime, endTime)
-			if forecastedInflowTsID:
-				forecastedInflow = self.getDataIfExists(forecastedInflowTsID)
+		self.db.setTimeWindow(curTime, endTime)
+		if forecastedInflowTsID:
+			forecastedInflow = self.getDataIfExists(forecastedInflowTsID)
+		else:
+			if 'LockDam' in poolLevelTsID:
+				forecastedInflowTsIdList = ['{}.Flow.Inst.6Hours.0.Fcst-NCRFC-CHIPS'.format(projectName),
+						'{}.Flow.Inst.6Hours.0.Fcst-NCRFC-CHIPS'.format(projectName),]
 			else:
 				forecastedInflowTsIdList = ['{}.Flow-In.Inst.6Hours.0.Fcst-NCRFC-CHIPS'.format(projectName),
 							'{}.Flow-Sim.Inst.6Hours.0.Fcst-NCRFC-CHIPS'.format(projectName),]
-				for forecastedInflowTsID in forecastedInflowTsIdList:
-					forecastedInflow = self.getDataIfExists(forecastedInflowTsID)
-					if forecastedInflow:
-						break
-		else:
-			forecastedInflow = None
+			for forecastedInflowTsID in forecastedInflowTsIdList:
+				forecastedInflow = self.getDataIfExists(forecastedInflowTsID)
+				if forecastedInflow:
+					break
+
 		
 		self.db.close()
 		
