@@ -491,9 +491,8 @@ class mvpProjectPlotter:
 			## plot marker bands
 			try:
 				for a in stageMarkers.split("|"):
-					
 					num, comment, color =  a.split(';')
-					self.markerBand(str(num),comment.strip(), plot.getViewport(poolLevel.getData()), color.strip(), 'soild')
+					self.markerBand(str(float(num)),comment.strip(), plot.getViewport(poolLevel.getData()), color.strip(), 'soild')
 			except NameError:
 				print("stageMarkers not defined")
 
@@ -508,7 +507,7 @@ class mvpProjectPlotter:
 			try:
 				for a in flowMarkers.split("|"):
 					num, comment, color =  a.split(';')
-					self.markerBand(str(num),comment.strip(), plot.getViewport(outflow.getData()), color.strip(), 'soild')
+					self.markerBand(str(float(num)),comment.strip(), plot.getViewport(outflow.getData()), color.strip(), 'soild')
 			except NameError:
 				print("flowMarkers not defined")
 		
