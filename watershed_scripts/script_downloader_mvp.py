@@ -1,543 +1,300 @@
-from javax.swing import JTree, JFrame, JOptionPane, JButton, JTextArea, JScrollPane, JComboBox, JPanel, JLabel, WindowConstants, JLabel, JTextField
-from java.awt import BorderLayout, Dimension, FlowLayout
-from javax.swing.border import EmptyBorder
-from java.awt.event     import ActionListener
-from javax.swing.tree import DefaultMutableTreeNode
-from collections import OrderedDict
-import re
-import DBAPI, hec
-from hec.script import Plot, AxisMarker, MessageBox
-from hec.heclib.util import HecTime
-from java.util import Calendar, TimeZone
-from java.lang import System
-from hec.cwmsVue import CwmsListSelection
-from hec.script import AxisMarker
-try:
-# Add rtsutils package to sys.path before importing
-    sys.path.append(os.path.join(os.environ['APPDATA'], "rsgis"))
-    #print(os.environ['APPDATA'], "rsgis")
-    from rtsutils import cavistatus
-except ImportError, ex:
-    raise
+from __future__ import with_statement
+import os
+import sys
+import urllib
+import glob
+from shutil import copyfile
+import hec2
+from com.rma.model import Project
+from javax.swing    import JButton, JDialog, JOptionPane, JEditorPane, UIManager
+import traceback
+import xml.etree.ElementTree as ET
+import datetime
+import tempfile, shutil
+import json
+import zipfile
+import webbrowser
 
-class mvpProjectPlotter:
-
-	def __init__(self, dataDict):
+########adapted from script_downloader.py
+#https://github.com/USACE/rts-utils/tree/master
 
 
-		self.dataDict = dataDict
-		self.frame = JFrame("MVP CWMS Plotter - Select Project to Plot", defaultCloseOperation = JFrame.DISPOSE_ON_CLOSE)
-		self.frame.setSize(500, 400)
-		self.frame.setLayout(BorderLayout())
-		watershedList = list(dataDict.keys())
+cwms_home = os.getcwd()
+watershed_path = Project.getCurrentProject().getProjectDirectory()
+################################################################################
+def get_remote_data(url):
+	try:
+		f = urllib.urlopen(url)
+		content = f.read()
+		f.close()
+	except:
+		print('Unable to get url contents')
+		return False
 
-		root = DefaultMutableTreeNode('Watershed')
-		for watershedName in watershedList:
-			watershedSites = DefaultMutableTreeNode(watershedName)
-			projectList = list(dataDict[watershedName].keys())
-			#print(watershedName)
-			watershedNode = DefaultMutableTreeNode(watershedName)
-			root.add(watershedNode)
+	if f.code == 404:
+		return False
 
-			#now add the cities starting with M & S
-			self.addSites(watershedNode, projectList)
+	return content
+################################################################################
+def download_file(url, dest):
+	try:
+		print 'Downloading {} to {}'.format(url, dest)
+		urllib.urlretrieve(url, dest)
+		print("Download Complete!")
+	except:
+		raise Exception('Unable to download from: {}'.format(url))
+################################################################################
+#credit: https://stackoverflow.com/questions/12683834/how-to-copy-directory-recursively-in-python-and-overwrite-all
+def recursive_overwrite(src, dest, ignore=None):
+    if os.path.isdir(src):
+        if not os.path.isdir(dest):
+            os.makedirs(dest)
+        files = os.listdir(src)
+        if ignore is not None:
+            ignored = ignore(src, files)
+        else:
+            ignored = set()
+        for f in files:
+            if f not in ignored:
+                recursive_overwrite(os.path.join(src, f),
+                                    os.path.join(dest, f),
+                                    ignore)
+    else:
+        shutil.copyfile(src, dest)
+#################################################################################
+def script_downloader(remote_repo, selection, appConfig):
 
-		self.tree = JTree(root)
+	update_libs = bool(appConfig['scripts'][selection]['update_libs'])
+	config_files = appConfig['scripts'][selection]['config_files']
+	watershed_path = Project.getCurrentProject().getProjectDirectory()
+	ws_script_dir = os.path.join(watershed_path, 'scripts')
 
-		scrollPane = JScrollPane()  # add a scrollbar to the viewport
-		scrollPane.setPreferredSize(Dimension(400,300))
-		scrollPane.getViewport().setView((self.tree))
+	scriptSrcURL = '{}/{}/{}'.format(remote_repo, appConfig['scripts'][selection]['remote_dir'], appConfig['scripts'][selection]['filename'])
+	print(scriptSrcURL)
 
-		panel = JPanel()
-		panel.add(scrollPane)
-		self.frame.add(panel, BorderLayout.NORTH)
-		#panel.setBorder(EmptyBorder(10, 10, 10, 10))
+	scriptDstFilePath = os.path.join(ws_script_dir, appConfig['scripts'][selection]['filename'])
+	print scriptDstFilePath
 
-		btn = JButton('Select', actionPerformed = self.plotTrigger)
-		self.frame.add(btn,BorderLayout.SOUTH)
+	# Copy the script file
+	if get_remote_data(scriptSrcURL):
+		try:
+			download_file(scriptSrcURL, scriptDstFilePath)
+		except:
+			JOptionPane.showMessageDialog(None, "Download failed for script '"+selection+"'", "Copy Error", JOptionPane.ERROR_MESSAGE)
+			return
 
-		#self.label = JLabel('Select Project')
-		#frame.add(self.label, BorderLayout.NORTH)
+	else:
+		JOptionPane.showMessageDialog(None, "Source File doesn't seem to exist for '"+selection+"'\n"+scriptSrcURL, \
+		"Something went wrong :-(", JOptionPane.ERROR_MESSAGE)
+		return
 
-		timeWindowPanel = JPanel()
+	#################################################################
+	# Check for script config files - These will only be downloaded
+	# if they don't exist in the local watershed/shared dir
+	#################################################################
 
-		self.lookBackOptions = ['Lookback 7 days', 'Lookback 30 days', 'Lookback 3 months', 'Lookback 6 months', 'Lookback 12 months', 'Lookback 18 months']
-		self.cbLookBack = JComboBox(self.lookBackOptions)
-		self.lookForwardOptions = ['Look forward 7 days', 'Look forward 28 days']
-		self.cbLookForward = JComboBox(self.lookForwardOptions)
-		timeWindowPanel.add(self.cbLookBack)
-		timeWindowPanel.add(self.cbLookForward)
-		self.frame.add(timeWindowPanel,BorderLayout.CENTER)
+	print(config_files)
+	print('Config file count: {}'.format(len(config_files)))
 
-		self.frame.pack();
-		self.frame.setLocationRelativeTo(None);
-		self.frame.setVisible(True)
-		self.addSites
+	# Keep track of what was actually downloaded
+	downloaded_configs = []
 
-	def addSites(self, branch, branchData=None):
-		'''  add data to tree branch
-			 requires branch and data to add to branch
-		'''
-		# this does not check to see if its a valid branch
-		if branchData == None:
-			branch.add(DefaultMutableTreeNode('No valid data'))
-		else:
-			for item in branchData:
-			  # add the data from the specified list to the branch
-			  branch.add(DefaultMutableTreeNode(item))
+	if len(config_files) > 0:
 
-	def cbSelect(self,event, cb, cbList):
-		selectionText = cbList[cb.selectedIndex]
-		days = int(re.search(r'\d+', selectionText).group())
-		#print(cbSelectionTextLB)
-		if 'months' in selectionText:
-			days = days*30.4167
-		return days
+		config_files_dir = os.path.join(watershed_path, 'shared')
 
-	def siteSelect(self, event):
-		selectionPaths = self.tree.getSelectionPaths()
-		if selectionPaths is not None:
-			
-			watershedDict = OrderedDict()
-			for row in selectionPaths:
-				path = list(row.getPath())
-				wtshd = str(path[1])
-				#print(wtshd)
-				if wtshd in watershedDict.keys():
-					try:
-						# if site is selected and values exist for watershed key
-						site = str(path[2])
-						if site not in watershedDict[wtshd]:
-							watershedDict[wtshd].append(site)
-					except:
-						# add all sites if watershed is selected and values exist for watershed key
-						for site in self.dataDict[wtshd].keys():
-							if site not in watershedDict[wtshd]:
-								watershedDict[wtshd].append(site)
+		for fname in config_files:
+			fileSrcURL = '{}/{}/{}/{}'.format(remote_repo, appConfig['scripts'][selection]['remote_dir'], 'shared', fname)
+			fileDstPath = os.path.join(config_files_dir, fname)
+			if os.path.isfile(fileDstPath):
+				saveConfig = JOptionPane.showConfirmDialog(None,"Configuration file exists.\nIf overwritten local changes synced to master copy on gitHub will not be kept.\nOverwrite configuration file?")
+				if saveConfig==0:
+					download_file(fileSrcURL, fileDstPath)
+					downloaded_configs.append(fileDstPath)
 				else:
-					#if no values exists for watershed key
-					try:
-						site = str(path[2])
-						watershedDict[wtshd] = [site]
-					except:
-						# add all sites if watershed is selected
-						watershedDict[wtshd] = self.dataDict[wtshd].keys()	
-			#print(watershedDict)
-			return watershedDict
-
-
-	def plotTrigger(self, event):
-		#get time window
-		self.lookBackDays = int(self.cbSelect(event, self.cbLookBack, self.lookBackOptions))
-		self.lookForewardDays = int(self.cbSelect(event, self.cbLookForward, self.lookForwardOptions))
-		watershedDict = self.siteSelect(event)
-
-		#if site is selected
-		if watershedDict:
-			#close GUI
-			self.frame.dispose()
-			#walkthrough and plot
-			for watershedName in watershedDict.keys():
-				for projectName in reversed(watershedDict[watershedName]):
-					print('Plotting ', projectName)
-					self.plotFunct(event, watershedName, projectName)
-
-					
-	
-	
-	def plotFunct(self, event, watershedName, projectName):	
-		params = self.dataDict[watershedName][projectName]
-		datum, poolLevelTsID, poolLevel2TsID, poolLevel3TsID, outflowTsID, inflowTsID, forecastedInflowTsID, tailwaterLevelTsID, stageMarkers, flowMarkers, self.units, elevationOrStage = params
-
-		
-		#plot band if its a lock and dam
-		bandwidth = 0.3
-		# Determine Script Context
-		isClient = hec.lang.ClientAppCheck.haveClientApp()
-		isCWMSVue = hec.cwmsVue.CwmsListSelection.getMainWindow() is not None
-		isShellScript = not isClient and not isCWMSVue
-		
-		# Get Database Connection
-		self.db = DBAPI.open()
-		
-		self.db.setTimeZone('UTC')
-		# Get Observed Data from CWMS Database
-		self.cal = Calendar.getInstance()
-		self.cal.setTimeZone(TimeZone.getTimeZone('UTC'))
-		self.cal.setTimeInMillis(System.currentTimeMillis())
-		t = HecTime(self.cal)
-		curTime = t.dateAndTime(104)
-		t.subtractDays(self.lookBackDays)
-		startTime = t.dateAndTime(104)
-		t.addDays(self.lookBackDays+self.lookForewardDays)
-		endTime = t.dateAndTime(104)
-		# Get Observed Data
-		self.db.setTimeWindow(startTime, curTime)
-		print(self.lookBackDays, self.lookForewardDays, startTime, curTime)
-		
-		
-		#get pool level
-		if poolLevelTsID:
-			poolLevel = self.getDataIfExists(poolLevelTsID)
-		else:
-			poolLevelTsIDList = ['{}.Stage.Inst.15Minutes.0.rev'.format(projectName),
-						'{}.Stage.Inst.1Hour.0.rev'.format(projectName),]
-			for poolLevelTsID in poolLevelTsIDList:
-				poolLevel = self.getDataIfExists(poolLevelTsID)
-				if poolLevel:
-					break
-		
-		#get second pool level
-		pool2Level = self.getDataIfExists(poolLevel2TsID)
-	
-		#get third pool level
-		pool3Level = self.getDataIfExists(poolLevel3TsID)
-	
-		
-		#get tailwater level
-		tailwaterLevel = self.getDataIfExists(tailwaterLevelTsID)	
-		if 'LockDam' not in poolLevelTsID:
-			# get stage manual measurment
-			stageMeasTsIdList = ['{}.Stage.Inst.0.0.Raw-USGS'.format(projectName),
-						'{}.Stage.Inst.0.0.Raw-CEMVP'.format(projectName),]
-			for stageMeasTsID in stageMeasTsIdList:
-				stageMeas = self.getDataIfExists(stageMeasTsID)
-				if stageMeas:
-					print(stageMeas)
-					break
-		else:
-			stageMeas=None		
-		#get outflow
-		if outflowTsID:
-			outflow = self.getDataIfExists(outflowTsID)
-		else:
-			outflowTsIdList = ['{}.Flow-Out.Inst.15Minutes.0.rev'.format(projectName),
-						'{}.Flow-Out.Inst.1Hour.0.rev'.format(projectName),
-						'{}.Flow.Inst.15Minutes.0.rev'.format(projectName),
-						'{}.Flow.Inst.1Hour.0.rev'.format(projectName),
-						'{}.Flow-Out.Inst.~1Day.0.CEMVP-Legacy'.format(projectName),
-						'{}.Flow.Inst.~4Hours.0.CEMVP-Legacy'.format(projectName)]
-			for outflowTsID in outflowTsIdList:
-				outflow = self.getDataIfExists(outflowTsID)
-				if outflow:
-					break
-		# get outflow manual measurment
-		outflowMeasTsIdList = ['{}-Tailwater.Flow.Inst.0.0.Raw-USGS'.format(projectName),
-					'{}-Tailwater.Flow.Inst.0.0.Raw-CEMVP'.format(projectName),]
-		for outflowMeasTsID in outflowMeasTsIdList:
-			outflowMeas = self.getDataIfExists(outflowMeasTsID)
-			if outflowMeas:
-				print(outflowMeas)
-				break
-		
-		
-		#get inflow
-		if 'LockDam' not in poolLevelTsID:
-			if inflowTsID:
-				inflow = self.getDataIfExists(inflowTsID)
+					print 'Skipping download of config file: {}'.format(fname)
 			else:
-				inflowTsIdList = ['{}.Flow-In.Ave.15Minutes.1Day.comp'.format(projectName),
-							'{}.Flow-In.Inst.~1Day.0.CEMVP-Legacy'.format(projectName),]
-				for inflowTsID in inflowTsIdList:
-					inflow = self.getDataIfExists(inflowTsID)
-					if inflow:
-						break
-		else:
-			inflow = None
-		
-		##get forecasted inflow
-		if 'LockDam' not in poolLevelTsID:
-			self.db.setTimeWindow(curTime, endTime)
-			if forecastedInflowTsID:
-				forecastedInflow = self.getDataIfExists(forecastedInflowTsID)
-			else:
-				forecastedInflowTsIdList = ['{}.Flow-In.Inst.6Hours.0.Fcst-NCRFC-CHIPS'.format(projectName),
-							'{}.Flow-Sim.Inst.6Hours.0.Fcst-NCRFC-CHIPS'.format(projectName),]
-				for forecastedInflowTsID in forecastedInflowTsIdList:
-					forecastedInflow = self.getDataIfExists(forecastedInflowTsID)
-					if forecastedInflow:
-						break
-		else:
-			forecastedInflow = None
-		
-		self.db.close()
-		
-		# Configure Plot Layout
-		plotName = "{}".format(projectName)	
-		try:
-			plotName+="\nPool Level {} ft at {} \n Outflow {} cfs ".format(round(poolLevel.lastValidValue(),2),
-			self.lastValidDateString(poolLevel), round(outflow.lastValidValue()))
-		except:
-			pass	
-		plot = Plot.newPlot(plotName)
-		layout = Plot.newPlotLayout()
-		if tailwaterLevel is not None:
-			taildata = tailwaterLevel.getData()
-			taildata.parameter='-1'
-	
-			stageView = layout.addViewport(.34)
-			stageTailView = layout.addViewport(.33)
-			flowView = layout.addViewport(.33)
-			
-		else:
-			stageView = layout.addViewport(.5)
-			flowView = layout.addViewport(.5)
-			stageTailView = None
-		
-		stageView.addCurve("Y1", poolLevel.getData())
-		if stageMeas is not None:
-			stageView.addCurve("Y1", stageMeas.getData())
-		if pool2Level is not None:
-			stageView.addCurve("Y1", pool2Level.getData())
-	
-		if pool3Level is not None:
-			stageView.addCurve("Y1", pool3Level.getData())
-			
-		if tailwaterLevel is not None:
-			stageTailView.addCurve("Y1", taildata)
-	
-		if outflow is not None:
-			flowView.addCurve("Y1", outflow.getData())
-		
-		if outflowMeas is not None:
-			flowView.addCurve("Y1", outflowMeas.getData())
-		
-		if inflow is not None:
-			flowView.addCurve("Y1", inflow.getData())
-	
-		if forecastedInflow is not None:
-			print(type(forecastedInflow),forecastedInflow)
-			flowView.addCurve("Y1", forecastedInflow.getData())
-	
-		
-		
-		# Add Layout Properties
-		layout.setHasLegend(True)
-		layout.setHasToolbar(True)
-		plot.configurePlotLayout(layout)
-		plot.setSize(960, 640)
-		panel = plot.getPlotpanel()
-		panel.setHorizontalViewportSpacing(1)
-		plot.showPlot()
-	
-		if poolLevel is not None:
-			if elevationOrStage:
-				plot.getViewport(poolLevel.getData()).getAxis('Y1').setLabel('Pool Elevation, {} {}'.format(poolLevel.getUnits(),datum))
-			else:
-				plot.getViewport(poolLevel.getData()).getAxis('Y1').setLabel('Pool Level, {}'.format(poolLevel.getUnits()))
-		if tailwaterLevel is not None:
-			plot.getViewport(taildata).getAxis('Y1').setLabel('Tailwater Level')
-		if outflow	is not None:
-			plot.getViewport(outflow.getData()).getAxis('Y1').setLabel('Flow, {}'.format(outflow.getUnits()))
-		# Create Plot Title Text
-		plotTitle = plot.getPlotTitle()
-		plotTitle.setText(plotName)
-		#plotTitle.setAlignment('center')
-		#plotTitle.setFont("Arial Black")
-		plotTitle.setFontSize(18)
-		plot.setPlotTitleVisible(1)
-		## Plot Line Styles
-		if poolLevel is not None:
-			self.curveFormatter(plot, poolLevel.getData(), "blue", 3, "Pool Elevation", None, None)
-		if stageMeas is not None:
-			curve = self.curveFormatter(plot, stageMeas.getData(), "red", 0, 'Measurement', None, None)
-			curve.setLineVisible(False)
-			curve.setSymbolsVisible(True)
-			curve.setSymbolSkipCount(0)
-			curve.setSymbolFillColor('red')
-			curve.setSymbolLineColor('red')
-			curve.setSymbolType('Asterisk')
-			curve.setSymbolSize(16)	
-		
-		if (outflowMeas is not None):
-			curve = self.curveFormatter(plot, outflowMeas.getData(), "red", 0, 'Measurement', None, None)
-			curve.setLineVisible(False)
-			curve.setSymbolsVisible(True)
-			curve.setSymbolSkipCount(0)
-			curve.setSymbolFillColor('red')
-			curve.setSymbolLineColor('red')
-			curve.setSymbolType('Asterisk')
-			curve.setSymbolSize(16)	
-		
-			if outflow is not None:
-				self.curveFormatter(plot, outflow.getData(), "lightblue", 1.5, "Outflow", None, None)
-		else:
-		
-			if outflow is not None:
-				self.curveFormatter(plot, outflow.getData(), "red", 1.5, "Outflow", None, None)
-		
-		
-		if inflow is not None:
-			self.curveFormatter(plot, inflow.getData(), "black", 1.5, 'Net Inflow', None, None)
-		
-		
-		if forecastedInflow is not None:
-			self.curveFormatter(plot, forecastedInflow.getData(), "black", 1.5, "Forecasted Inflow (NWS)", "dash", None)
-		
-			
-		# X Axes Marker
-		markerCurTime = AxisMarker()
-		markerCurTime.axis = "X1"
-		markerCurTime.value = curTime
-		markerCurTime.labelText = "Cur Time: "+curTime+" UTC"
-		markerCurTime.labelFont = "Arial,14"
-		markerCurTime.labelPosition = "center"
-		markerCurTime.labelAlignment = "center"
-		markerCurTime.lineWidth = 1.0
-		markerCurTime.lineStyle = "Dot"
-		if poolLevel is not None:
-			plot.getViewport(poolLevel.getData()).addAxisMarker(markerCurTime)
-		markerCurTime.labelText = ''
-		if outflow	is not None:
-			plot.getViewport(outflow.getData()).addAxisMarker(markerCurTime)
-		if tailwaterLevel is not None:
-			plot.getViewport(tailwaterLevel.getData()).addAxisMarker(markerCurTime)
-		
-		if stageMarkers:
-			## plot marker bands
-			try:
-				for a in stageMarkers.split("|"):
-					
-					num, comment, color =  a.split(';')
-					self.markerBand(str(num),comment.strip(), plot.getViewport(poolLevel.getData()), color.strip(), 'soild')
-			except NameError:
-				print("stageMarkers not defined")
+				download_file(fileSrcURL, fileDstPath)
+				downloaded_configs.append(fileDstPath)				
 
-		if "LockDam" in poolLevelTsID:
-			self.lockDamBand(poolLevelTsID, plot.getViewport(poolLevel.getData()),bandwidth, "Dash Dot-Dot")
-			try:
-				self.lockDamBand(poolLevel2TsID, plot.getViewport(poolLevel.getData()),bandwidth, "Dash Dot-Dot")
-			except:
-				pass
-		if flowMarkers:
-			## plot marker bands
-			try:
-				for a in flowMarkers.split("|"):
-					num, comment, color =  a.split(';')
-					self.markerBand(str(num),comment.strip(), plot.getViewport(outflow.getData()), color.strip(), 'soild')
-			except NameError:
-				print("flowMarkers not defined")
-		
-		del(datum, poolLevelTsID, poolLevel2TsID, poolLevel3TsID, outflowTsID, inflowTsID, forecastedInflowTsID, tailwaterLevelTsID, stageMarkers, flowMarkers, elevationOrStage)  	
 
-	def markerBand(self, value, label, viewport, color, linestyle):
-	    '''
-	    Adds a horizontal marker to plot viewport
-	    '''
-	    mb = AxisMarker()
-	    mb.value = value
-	    mb.labelText = label
-	    mb.labelFont = "Arial,Bold,12"
-	    mb.labelColor = 'gray'
-	    mb.lineColor = color
-	    mb.lineWidth = 2.5
-	    mb.lineStyle = linestyle
-	    mb.labelPosition = 'below'
-	    viewport.addAxisMarker(mb)
-	    return mb
-	def curveFormatter(self, plot, dataset, lineColor, lineWidth, legendText, lineStyle, fillCurveType):
-		'''
-		Formats curves (color, width, style)
-		'''
-		curve = plot.getCurve(dataset)
-		curve.setLineColor(lineColor)
-		curve.setLineWidth(lineWidth)
-		try:
-			curve.setLineStyle(lineStyle)
-		except:
-			print('could not setLinStyle',dataset)
-		label = plot.getLegendLabel(dataset)
-		label.setText(legendText)
-		if fillCurveType == "above":
-			curve.setFillColor(lineColor)
-			curve.setFillPattern("diagonal cross")
-			curve.setFillType("above")
-		elif fillCurveType == "below":
-			curve.setFillColor(lineColor)
-			curve.setFillPattern("diagonal cross")
-			curve.setFillType("below")
-		return curve
-	def getDataIfExists(self, tsID):
-		try:
-			data = self.db.read(tsID)
-			if self.units == 'metric':
-				print('convert to metric')
-				print(data.getUnits())
-				data = data.convertToMetricUnits()
-				print(data.getUnits())
-			return data
-		except:
-			print('Error: Data in {} does not exists for time window'.format(tsID))
-	
-	def lastValidDateString(self, tsData):
-		intTime = tsData.lastValidDate()
-		lastTime = HecTime(self.cal)
-		lastTime.set(intTime)
-		return lastTime.dateAndTime(104)
-	def lockDamBand(self, tsid, viewport, bandwith, linestyle):
-		# Dictionaries
-		centerOfBand = {'LockDam_02' : 686.50,
-				'LockDam_03' : 674.00,
-				'LockDam_04' : 666.50,
-				'LockDam_05' : 659.50,
-				'LockDam_05a' : 650.00,
-				'LockDam_06' : 644.50,
-				'LockDam_07' : 639.00,
-				'LockDam_08' : 630.00,
-				'LockDam_09' : 619.00,
-				'LockDam_10' : 611.00,
-				'SSPM5' : 687.20,
-				'PREW3' : 675.00,
-				'WABM5' : 667.00,
-				'AMAW3' : 660.00,
-				'LockDam_05-Tailwater' : 651.00,
-				'WNAM5' : 645.50,
-				'LACW3' : 631.00,
-				'LNSI4' : 620.00,
-				'CLAI4' : 611.8}
-		loc = tsid.split('.')[0]
-		centerOfBand = centerOfBand[loc]
+	try:
+		temp_dir = tempfile.mkdtemp()
+		print 'created temp folder {}'.format(temp_dir)
 
-		upperBand = str(centerOfBand+bandwith)
-		lowerBand = str(centerOfBand-bandwith)
+		# Download the master repo zip for the library packages
+		repo_url_parts = remote_repo.split('/')
+		repo_url_parts[2] = 'github.com'
+		repo_url_parts[5] = 'archive'
+		repo_url_parts.append('master.zip')
+		zip_url = '/'.join(repo_url_parts)
 
-		if loc == 'CLAI4':
-			self.markerBand(str(centerOfBand), 'Secondary Control - Clayton', viewport, 'red',  linestyle)
-		elif loc == 'LockDam_10':
-			self.markerBand(upperBand, 'Top of Primary', viewport, 'blue',  linestyle)
-			self.markerBand(lowerBand, 'Bottom of Primary', viewport, 'blue',  linestyle)		
-		elif 'LockDam' in loc and 'Tailwater' not in loc:
-			self.markerBand(upperBand, 'Top of Secondary', viewport, 'blue',  linestyle)
-			self.markerBand(lowerBand, 'Bottom of Secondary', viewport, 'blue',  linestyle)
+		download_file(zip_url, temp_dir+'/master.zip')
+
+		with zipfile.ZipFile(os.path.join(temp_dir, 'master.zip'), "r") as z:
+			z.extractall(temp_dir)
+
+			print('--Files in temp folder--')
+			for f in os.listdir(temp_dir):
+				print(f)
+				if os.path.isdir(os.path.join(temp_dir, f)):
+
+					pkg_dir_src = os.path.join(temp_dir, f, 'appdata', 'rsgis')
+					pkg_dir_dst = os.path.join(os.getenv('APPDATA'), 'rsgis')
+
+					print('*'*50)
+					print('Copying repo libraries...')
+					print 'From: {}'.format(pkg_dir_src)
+					print 'To: {}'.format(pkg_dir_dst)
+					print('*'*50)
+
+					# Copy the packages/libs from temp folder to destination
+					recursive_overwrite(pkg_dir_src, pkg_dir_dst)
+
+					# Check for 3rd party libraries that need to be downloaded
+					#------------------------------------------------------------
+					for lib_name, lib_obj in appConfig['third_party_libs'].items():
+						filename = os.path.basename(lib_obj['url'])
+						lib_dest_dir = os.path.join(os.getenv('APPDATA'), 'rsgis', lib_name)
+						version_file = os.path.join(lib_dest_dir, 'version.json')
+
+						download_lib = True
+
+						if os.path.isfile(version_file):
+							print 'Loading json file {}'.format(version_file)
+							with open(version_file) as json_file:
+								version = json.load(json_file)['version']
+								if version == lib_obj['version']:
+									download_lib = False
+									print 'Will not download lib: {}'.format(lib_name)
+
+
+						if download_lib:
+
+							dest_file = os.path.join(lib_dest_dir, filename)
+							download_file(lib_obj['url'], dest_file)
+
+							if zipfile.is_zipfile(dest_file):
+								with zipfile.ZipFile(dest_file, "r") as z:
+									z.extractall(lib_dest_dir)
+
+								# Delete the zip file
+								os.remove(dest_file)
+
+							# Write the version to json file for comparison later
+							with open(version_file, 'w') as outfile:
+								json.dump(lib_obj, outfile)
+					#------------------------------------------------------------
+
+	except:
+		print('Unable to create temp folder')
+		print "Unexpected error:", sys.exc_info()
+		print(traceback.print_exc())
+	finally:
+		shutil.rmtree(temp_dir)
+		print 'removing {}'.format(temp_dir)
+
+	try:
+		help_url = appConfig['scripts'][selection]['help_url']
+	except:
+		help_url = None
+
+	msg = 'Script downloaded for '+selection
+	if len(downloaded_configs) > 0:
+		msg += '\n\nThe following configuration file(s) have been downloaded:'
+		for cf in downloaded_configs:
+			msg += '\n'+cf
+
+	JOptionPane.showMessageDialog(None, msg, "Success", JOptionPane.INFORMATION_MESSAGE)
+
+	# Prompt for help documentation if available
+	if help_url is not None:
+		confirm_docs_msg = "Would you like to view to the documentation for this script?"
+		confirm_docs_result = JOptionPane.showConfirmDialog(None, confirm_docs_msg)
+		if confirm_docs_result == 0:
+			webbrowser.open(help_url, new=2, autoraise=True)
 		else:
-			self.markerBand(upperBand, 'Top of Primary', viewport, 'red',  linestyle)
-			self.markerBand(lowerBand, 'Bottom of Primary', viewport, 'red', linestyle)			
+			return
 
-			
+
+################################################################################
+def getAppConfig(filePath):
+	try:
+		# Read from the config file
+		with open(filePath) as f:
+			json_data = json.load(f)
+			return json_data
+	except:
+		return False
+################################################################################
+def isScriptButtonAdded(filename):
+
+	configFile = watershed_path+'/cavi/watershedScripts.xml'
+	scriptPresent = False
+
+	if os.path.isfile(configFile):
+		tree = ET.parse(configFile)
+		root = tree.getroot()
+		for scriptType in root.findall('FORECAST'):
+			#print scriptType
+			for script in scriptType.findall('Script'):
+				#print script.attrib
+				if script.attrib['File'] == filename:
+					return True
+
+	# Return False - Default if node not found in XML file
+	return False
+################################################################################
+def main():
+
+	code_version = '18Jan2022'
+	# Get the config file stored on Github.
+	# This allows new scripts to be added without this script needing to be replaced on every PC/Server Watershed
+
+	remote_repo = "https://raw.githubusercontent.com/msweier/mvp-CWMS-utils/master"
+
+	remote_config = get_remote_data(remote_repo+'/script_downloader_mvp/downloader_config.json')
+	# Verify remote data was returned, otherwise exit
+	if remote_config == False:
+		errMsg = 'Failed to read remote config file.\n'
+		JOptionPane.showMessageDialog(None, errMsg, "Config Error", JOptionPane.ERROR_MESSAGE)
+		return
+
+	appConfig = json.loads(remote_config)
+
+	# Check to see if script downloader needs to be updated (by itself)
+	fileVersion = appConfig['version']
+	code_version_dt = datetime.datetime.strptime(code_version, '%d%b%Y')
+	file_version_dt = datetime.datetime.strptime(fileVersion, '%d%b%Y')
+
+	if code_version_dt < file_version_dt:
+		msg = "Script Downloader MVP is out of date, please update using this script.\nLatest version: "\
+		+appConfig['version']+'\nYour version: '+code_version
+		JOptionPane.showMessageDialog(None, msg, "Version Check", JOptionPane.ERROR_MESSAGE)
+	else:
+		print('Script Downloader MVP Version is current.')
+
+	choices = appConfig['scripts'].keys()
+	choices.sort()
+
+	selection = JOptionPane.showInputDialog(
+			None,                                               # dialog parent component
+			"Select the script to downloader",             		# message
+			"Script Downloader - v"+code_version,         		# title
+			JOptionPane.PLAIN_MESSAGE,                          # message type (sets default icon)
+			None,                                               # icon to override default
+			choices,                                            # list of selections
+			choices[0])                                         # initial selection
+
+	# If cancel was clicked
+	if selection is None:
+		return
+
+	script_filename = appConfig['scripts'][selection]['filename']
+
+	script_downloader(remote_repo, selection, appConfig)
+
+	print("Script complete")
+################################################################################
 if __name__ == '__main__':
-    ##read imputs from file
-    
-    filePath = os.path.join(
-        cavistatus.get_shared_directory(),
-        'projectDBplotInputs.csv'
-        )
-    
-    #############################
-    #dictionary we will put stuff in from input file
-    dataDict = OrderedDict()
-    #grab inputs from file and put into dictionary
-    with open(filePath, mode='r') as f:
-    	lines = f.readlines()
-    	#walk through input file starting on line 2
-    	for line in lines[1::]:
-    		#print(line)
-    		#grab dict key from first item
-    		watershedKey = line.split(',')[0]
-    		siteKey = line.split(',')[1]
-    		param = line.split('\n')[0].split(',')[2::]
-    		#store data  in dictionary 
-    		if watershedKey not in dataDict:
-    			dataDict[watershedKey] = OrderedDict()
-    		dataDict[watershedKey][siteKey] = param
-    mvpProjectPlotter(dataDict)
-    
+	main()
