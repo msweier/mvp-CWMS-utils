@@ -26,7 +26,7 @@ class mvpGagePlotter:
 
 
 		self.dataDict = dataDict
-		self.frame = JFrame("MVP CWMS Plotter - Select Project to Plot", defaultCloseOperation = JFrame.DISPOSE_ON_CLOSE)
+		self.frame = JFrame("MVP CWMS Plotter - Select Gage to Plot", defaultCloseOperation = JFrame.DISPOSE_ON_CLOSE)
 		self.frame.setSize(500, 400)
 		self.frame.setLayout(BorderLayout())
 		watershedList = list(dataDict.keys())
