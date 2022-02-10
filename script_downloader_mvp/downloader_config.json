@@ -1,34 +1,34 @@
 {
   "scripts": {
-    "Mississippi River Reg Sheet": {
+    "3. Mississippi River Reg Sheet": {
       "remote_dir": "watershed_scripts",
       "filename": "Daily_Reg_Sheet.py",
       "update_libs": true,
       "help_url": "https://github.com/msweier/mvp-CWMS-utils/blob/main/appdata/rsgis/REGSHEET.md",
       "config_files": ["DailyRegSheet_Computations.xlsx"]
     },
-    "MVP Project Plot DB": {
+    "1. MVP Project Plot DB": {
       "remote_dir": "watershed_scripts",
       "filename": "mvpProjectsDbPlot.py",
       "update_libs": true,
       "help_url": null,
       "config_files": ["projectDBplotInputs.csv"]
     },
-    "MVP Gage Plot DB": {
+    "2. MVP Gage Plot DB": {
       "remote_dir": "watershed_scripts",
       "filename": "mvpGageDbPlot.py",
       "update_libs": true,
       "help_url": null,
       "config_files": ["gageDBplotInputs.csv"]
     },
-    "Gate Entry": {
+    "4. Gate Entry": {
       "remote_dir": "watershed_scripts",
       "filename": "gateEntry.py",
       "update_libs": false,
       "help_url": null,
       "config_files": []
     },
-    "Script Downloader MVP": {
+    "5. Script Downloader MVP": {
       "remote_dir": "watershed_scripts",
       "filename": "script_downloader_mvp.py",
       "update_libs": false,
