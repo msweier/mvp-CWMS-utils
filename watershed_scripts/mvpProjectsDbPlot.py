@@ -12,13 +12,7 @@ from java.util import Calendar, TimeZone
 from java.lang import System
 from hec.cwmsVue import CwmsListSelection
 from hec.script import AxisMarker
-try:
-# Add rtsutils package to sys.path before importing
-    sys.path.append(os.path.join(os.environ['APPDATA'], "rsgis"))
-    #print(os.environ['APPDATA'], "rsgis")
-    from rtsutils import cavistatus
-except ImportError, ex:
-    raise
+from com.rma.model import Project
 
 class mvpProjectPlotter:
 
@@ -519,29 +513,28 @@ class mvpProjectPlotter:
 
 			
 if __name__ == '__main__':
-    ##read imputs from file
-    
-    filePath = os.path.join(
-        cavistatus.get_shared_directory(),
-        'projectDBplotInputs.csv'
-        )
-    
-    #############################
-    #dictionary we will put stuff in from input file
-    dataDict = OrderedDict()
-    #grab inputs from file and put into dictionary
-    with open(filePath, mode='r') as f:
-    	lines = f.readlines()
-    	#walk through input file starting on line 2
-    	for line in lines[1::]:
-    		#print(line)
-    		#grab dict key from first item
-    		watershedKey = line.split(',')[0]
-    		siteKey = line.split(',')[1]
-    		param = line.split('\n')[0].split(',')[2::]
-    		#store data  in dictionary 
-    		if watershedKey not in dataDict:
-    			dataDict[watershedKey] = OrderedDict()
-    		dataDict[watershedKey][siteKey] = param
-    mvpProjectPlotter(dataDict)
+	##read imputs from file
+	#watershed Path
+	watershed_path = Project.getCurrentProject().getProjectDirectory()
+	sharedPath = os.path.join(watershed_path,'shared')
+	filePath = os.path.join(sharedPath,'projectDBplotInputs.csv')
+	
+	#############################
+	#dictionary we will put stuff in from input file
+	dataDict = OrderedDict()
+	#grab inputs from file and put into dictionary
+	with open(filePath, mode='r') as f:
+		lines = f.readlines()
+		#walk through input file starting on line 2
+		for line in lines[1::]:
+			#print(line)
+			#grab dict key from first item
+			watershedKey = line.split(',')[0]
+			siteKey = line.split(',')[1]
+			param = line.split('\n')[0].split(',')[2::]
+			#store data  in dictionary 
+			if watershedKey not in dataDict:
+				dataDict[watershedKey] = OrderedDict()
+			dataDict[watershedKey][siteKey] = param
+	mvpProjectPlotter(dataDict)
     
