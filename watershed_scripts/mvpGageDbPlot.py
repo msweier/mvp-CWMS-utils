@@ -63,7 +63,7 @@ class mvpGagePlotter:
 
 		self.lookBackOptions = ['Lookback 7 days', 'Lookback 30 days', 'Lookback 3 months', 'Lookback 6 months', 'Lookback 12 months', 'Lookback 18 months', 'Lookback 24 months']
 		self.cbLookBack = JComboBox(self.lookBackOptions)
-		self.lookForwardOptions = ['Look forward 7 days', 'Look forward 28 days']
+		self.lookForwardOptions = ['Look forward 0 days', 'Look forward 7 days', 'Look forward 28 days']
 		self.cbLookForward = JComboBox(self.lookForwardOptions)
 		timeWindowPanel.add(self.cbLookBack)
 		timeWindowPanel.add(self.cbLookForward)
