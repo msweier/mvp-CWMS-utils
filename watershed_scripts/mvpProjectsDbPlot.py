@@ -163,8 +163,9 @@ class mvpProjectPlotter:
 			curve.setLineStyle(lineStyle)
 		except:
 			print('could not setLinStyle',dataset)
-		label = plot.getLegendLabel(dataset)
-		label.setText(legendText)
+		if legendText:
+			label = plot.getLegendLabel(dataset)
+			label.setText(legendText)
 		if fillCurveType == "above":
 			curve.setFillColor(lineColor)
 			curve.setFillPattern("diagonal cross")
@@ -232,7 +233,7 @@ class mvpProjectPlotter:
 	
 	def plotFunct(self, event, watershedName, projectName):	
 		params = self.dataDict[watershedName][projectName]
-		datum, poolLevelTsID, poolLevel2TsID, poolLevel3TsID, outflowTsID, inflowTsID, forecastedInflowTsID, tailwaterLevelTsID, stageMarkers, flowMarkers, self.units, elevationOrStage = params
+		datum, poolLevelTsID, poolLevel2TsID, poolLevel3TsID, outflowTsID, outflow2TsID, inflowTsID, forecastedInflowTsID, tailwaterLevelTsID, stageMarkers, flowMarkers, self.units, elevationOrStage = params
 
 		
 		#plot band if its a lock and dam
@@ -306,6 +307,12 @@ class mvpProjectPlotter:
 				outflow = self.getDataIfExists(outflowTsID)
 				if outflow:
 					break
+
+		#get outflow 2
+		if outflow2TsID:
+			outflow2 = self.getDataIfExists(outflow2TsID)
+
+					
 		# get outflow manual measurment
 		outflowMeasTsIdList = ['{}-Tailwater.Flow.Inst.0.0.Raw-USGS'.format(projectName),
 					'{}-Tailwater.Flow.Inst.0.0.Raw-CEMVP'.format(projectName),]
@@ -386,6 +393,8 @@ class mvpProjectPlotter:
 	
 		if outflow is not None:
 			flowView.addCurve("Y1", outflow.getData())
+		if outflow2 is not None:
+			flowView.addCurve("Y1", outflow2.getData())
 		
 		if outflowMeas is not None:
 			flowView.addCurve("Y1", outflowMeas.getData())
@@ -463,6 +472,9 @@ class mvpProjectPlotter:
 		
 		if forecastedInflow is not None:
 			self.curveFormatter(plot, forecastedInflow.getData(), "black", 1.5, "Forecasted Inflow (NWS)", "dash", None)
+
+		if outflow2 is not None:
+			self.curveFormatter(plot, outflow2.getData(), "cyan", 1.5, None, "dash", None)
 		
 			
 		# X Axes Marker
