@@ -309,8 +309,7 @@ class mvpProjectPlotter:
 					break
 
 		#get outflow 2
-		if outflow2TsID:
-			outflow2 = self.getDataIfExists(outflow2TsID)
+		outflow2 = self.getDataIfExists(outflow2TsID)
 
 					
 		# get outflow manual measurment
