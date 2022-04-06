@@ -212,7 +212,7 @@ class mvpProjectPlotter:
 				'WNAM5' : 645.50,
 				'LACW3' : 631.00,
 				'LNSI4' : 620.00,
-				'CLAI4' : 611.8}
+				'CLAI4' : 611.8,}
 		loc = tsid.split('.')[0]
 		centerOfBand = centerOfBand[loc]
 
@@ -223,7 +223,8 @@ class mvpProjectPlotter:
 			self.markerBand(str(centerOfBand), 'Secondary Control - Clayton', viewport, 'red',  linestyle)
 		elif loc == 'LockDam_10':
 			self.markerBand(upperBand, 'Top of Primary', viewport, 'blue',  linestyle)
-			self.markerBand(lowerBand, 'Bottom of Primary', viewport, 'blue',  linestyle)		
+			self.markerBand(lowerBand, 'Bottom of Primary', viewport, 'blue',  linestyle)	
+			self.markerBand('610', 'Tertiary', viewport, 'cyan',  linestyle)		
 		elif 'LockDam' in loc and 'Tailwater' not in loc:
 			self.markerBand(upperBand, 'Top of Secondary', viewport, 'blue',  linestyle)
 			self.markerBand(lowerBand, 'Bottom of Secondary', viewport, 'blue',  linestyle)
@@ -237,7 +238,7 @@ class mvpProjectPlotter:
 
 		
 		#plot band if its a lock and dam
-		bandwidth = 0.3
+		bandwidth = 0.2
 		# Determine Script Context
 		isClient = hec.lang.ClientAppCheck.haveClientApp()
 		isCWMSVue = hec.cwmsVue.CwmsListSelection.getMainWindow() is not None
