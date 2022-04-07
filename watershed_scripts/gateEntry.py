@@ -27,6 +27,9 @@ from rma.swing          import DateChooser
 import DBAPI
 from hec.script.Constants import TRUE, FALSE
 from datetime import datetime, timedelta
+
+MessageBox.showPlain("This script has been replaced by website. Use https://wm.mvp.ds.usace.army.mil/GateEntry/GateEntry.html.", "Gate Entry Program")
+"""
 #################
 timeZone = "America/Chicago"
 #timeZone = 
@@ -223,3 +226,4 @@ if str(projectSelected) != "None" :
 	
 	#Closes database
 	db.close()
+"""
