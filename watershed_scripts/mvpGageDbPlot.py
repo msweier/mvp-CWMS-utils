@@ -342,6 +342,9 @@ class mvpGagePlotter:
 
 		# Create Plot Title Text
 		plotTitle = plot.getPlotTitle()
+		# add CUI tag if showing forecast data
+		if self.lookForewardDays>0:
+			plotName = "<html><strong>CUI//WATER//FED ONLY</b></strong>\n"+plotName
 		plotTitle.setText(plotName)
 		#plotTitle.setAlignment('center')
 		#plotTitle.setFont("Arial Black")
