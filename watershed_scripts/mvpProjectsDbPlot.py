@@ -57,7 +57,7 @@ class mvpProjectPlotter:
 
 		self.lookBackOptions = ['Lookback 7 days', 'Lookback 30 days', 'Lookback 3 months', 'Lookback 6 months', 'Lookback 12 months', 'Lookback 18 months']
 		self.cbLookBack = JComboBox(self.lookBackOptions)
-		self.lookForwardOptions = ['Look forward 7 days', 'Look forward 28 days']
+		self.lookForwardOptions = ['Look forward 7 days', 'Look forward 28 days', 'Look forward 0 days']
 		self.cbLookForward = JComboBox(self.lookForwardOptions)
 		timeWindowPanel.add(self.cbLookBack)
 		timeWindowPanel.add(self.cbLookForward)
@@ -357,6 +357,7 @@ class mvpProjectPlotter:
 		self.db.close()
 		
 		# Configure Plot Layout
+
 		plotName = "{}".format(projectName)	
 		try:
 			plotName+="\nPool Level {} {} at {} \n Outflow {} {} ".format(round(poolLevel.lastValidValue(),2),
@@ -365,6 +366,7 @@ class mvpProjectPlotter:
 		except:
 			pass	
 		plot = Plot.newPlot(plotName)
+
 		layout = Plot.newPlotLayout()
 		if tailwaterLevel is not None:
 			taildata = tailwaterLevel.getData()
@@ -428,6 +430,9 @@ class mvpProjectPlotter:
 			plot.getViewport(outflow.getData()).getAxis('Y1').setLabel('Flow, {}'.format(outflow.getUnits()))
 		# Create Plot Title Text
 		plotTitle = plot.getPlotTitle()
+		# add CUI tag if showing forecast data
+		if self.lookForewardDays>0:
+			plotName = "<html><strong>\t\t\tCUI//WATER//FED ONLY</b></strong>\n"+plotName
 		plotTitle.setText(plotName)
 		#plotTitle.setAlignment('center')
 		#plotTitle.setFont("Arial Black")
