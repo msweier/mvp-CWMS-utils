@@ -16,7 +16,7 @@ from com.rma.model import Project
 ###############
 code_version = '11May2022'
 flowTypes = ['Hornet Comp (Legacy) - green', 'CWMS Comp - red']
-flowTypeSelection = JOptionPane.showInputDialog(None,"Choose Flow Comp to Display","Daily Reg Sheet - ver. {}".format(code_version),JOptionPane.PLAIN_MESSAGE,None,flowTypes,flowTypes[0])
+flowTypeSelection = JOptionPane.showInputDialog(None,"Choose Flow Comp to Display","Daily Reg Sheet - ver. {}".format(code_version),JOptionPane.PLAIN_MESSAGE,None,flowTypes,flowTypes[1])
 
 if flowTypeSelection:
 	print(flowTypeSelection)
@@ -548,6 +548,8 @@ if flowTypeSelection:
 	
 	#desktop path
 	user = os.getenv('username')
+	if 'B6PEBKJ1' in user:
+		user = 'B0rbwbkj'
 	desktopPath = "C:\Users\{}\Desktop\DailyRegSheet".format(user)
 	##create directory if it doesn't exist
 	if not os.path.exists(desktopPath):
