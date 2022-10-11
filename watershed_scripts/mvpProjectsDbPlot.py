@@ -311,6 +311,8 @@ class mvpProjectPlotter:
 
 		#get outflow 2
 		outflow2 = self.getDataIfExists(outflow2TsID)
+		
+			
 
 					
 		# get outflow manual measurment
@@ -321,7 +323,9 @@ class mvpProjectPlotter:
 			if outflowMeas:
 				print(outflowMeas)
 				break
-		
+		if '.Inst.0.0' in outflow2TsID:
+			outflowMeas = outflow2
+			outflow2 = None
 		
 		#get inflow
 		if 'LockDam' not in poolLevelTsID:
