@@ -14,7 +14,7 @@ from hec.dataTable                  import HecDataTableToExcel, HecDataTableFram
 from com.rma.model import Project
 
 ###############
-code_version = '11Nov2022'
+code_version = '09Nov2022'
 flowTypes = ['Hornet Comp (Legacy) - green', 'CWMS Comp - red']
 #flowTypeSelection = JOptionPane.showInputDialog(None,"Choose Flow Comp to Display","Daily Reg Sheet - ver. {}".format(code_version),JOptionPane.PLAIN_MESSAGE,None,flowTypes,flowTypes[1])
 flowTypeSelection = flowTypes[1]
@@ -192,7 +192,9 @@ if flowTypeSelection:
 	cal = Calendar.getInstance()
 	cal.setTimeZone(TimeZone.getTimeZone("America/Chicago"))
 	cal.setTimeInMillis(System.currentTimeMillis())
+	#cal.setTimeInMillis(1636214400000)
 	t = HecTime(cal)
+	
 	#print t.dateAndTime(104)
 	curTime = t.dateAndTime(104)
 	curdate = t.date(104)
@@ -204,11 +206,11 @@ if flowTypeSelection:
 	#print t.dateAndTime(104)
 	###############
 	t.subtractHours(112)
-	#t.subtractHours(6)
+	t.addHours(6)
 	#print t.dateAndTime(104)
 	startTime = t.dateAndTime(104)
 	
-	t.addHours(112+24*5)
+	t.addHours(112+24*5+6)
 	fcstTime = t.dateAndTime(104)
 	db.setTimeWindow(startTime, fcstTime)
 	print(startTime, curTime)
@@ -523,7 +525,7 @@ if flowTypeSelection:
 	table.setData(datasets)
 	print(elev2.getTimeZoneID())
 	print(table.getTimeZone())
-	#table.setTimeZone(TimeZone.getTimeZone("America/Chicago"))
+	table.setTimeZone(TimeZone.getTimeZone("America/Chicago"))
 	print(table.getTimeZone())
 	#table.showTable()
 	
@@ -548,6 +550,8 @@ if flowTypeSelection:
 	
 	#desktop path
 	user = os.getenv('username')
+	if 'B6PEBKJ1' in user:
+		user = 'B0rbwbkj'
 	desktopPath = "C:\Users\{}\Desktop\DailyRegSheet".format(user)
 	##create directory if it doesn't exist
 	if not os.path.exists(desktopPath):
