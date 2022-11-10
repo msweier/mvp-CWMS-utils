@@ -24,7 +24,7 @@
     "4. MVP Wind/Temp Plot DB": {
       "remote_dir": "watershed_scripts",
       "filename": "mvpWindTempPlot.py",
-      "update_libs": false,
+      "update_libs": true,
       "help_url": null,
       "config_files": ["gageWindTempinputs.csv"]
     },
