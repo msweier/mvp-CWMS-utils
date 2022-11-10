@@ -21,12 +21,19 @@
       "help_url": null,
       "config_files": ["gageDBplotInputs.csv"]
     },
+    "4. MVP Wind/Temp Plot DB": {
+      "remote_dir": "watershed_scripts",
+      "filename": "mvpWindTempPlot.py",
+      "update_libs": false,
+      "help_url": null,
+      "config_files": []
+    },
     "4. Gate Entry": {
       "remote_dir": "watershed_scripts",
       "filename": "gateEntry.py",
       "update_libs": false,
       "help_url": null,
-      "config_files": []
+      "config_files": ['gageWindTempinputs.csv']
     },
     "5. Script Downloader MVP": {
       "remote_dir": "watershed_scripts",
@@ -37,5 +44,5 @@
     }
   },
   "third_party_libs": {},
-  "version": "13Dec2021"
+  "version": "11Dec2022"
 }
