@@ -33,7 +33,7 @@
       "filename": "gateEntry.py",
       "update_libs": false,
       "help_url": null,
-      "config_files": [']
+      "config_files": []
     },
     "5. Script Downloader MVP": {
       "remote_dir": "watershed_scripts",
