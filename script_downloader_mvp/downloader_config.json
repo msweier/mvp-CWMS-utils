@@ -28,14 +28,14 @@
       "help_url": null,
       "config_files": ["gageWindTempinputs.csv"]
     },
-    "4. Gate Entry": {
+    "5. Gate Entry": {
       "remote_dir": "watershed_scripts",
       "filename": "gateEntry.py",
       "update_libs": false,
       "help_url": null,
       "config_files": []
     },
-    "5. Script Downloader MVP": {
+    "6. Script Downloader MVP": {
       "remote_dir": "watershed_scripts",
       "filename": "script_downloader_mvp.py",
       "update_libs": false,
