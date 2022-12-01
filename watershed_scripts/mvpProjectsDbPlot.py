@@ -234,7 +234,7 @@ class mvpProjectPlotter:
 	
 	def plotFunct(self, event, watershedName, projectName):	
 		params = self.dataDict[watershedName][projectName]
-		datum, poolLevelTsID, poolLevel2TsID, poolLevel3TsID, outflowTsID, outflow2TsID, inflowTsID, forecastedInflowTsID, tailwaterLevelTsID, stageMarkers, flowMarkers, self.units, elevationOrStage = params
+		datum, poolLevelTsID, poolLevel2TsID, poolLevel3TsID, poolLevel4TsID, outflowTsID, outflow2TsID, inflowTsID, forecastedInflowTsID, tailwaterLevelTsID, stageMarkers, flowMarkers, self.units, elevationOrStage = params
 
 		
 		#plot band if its a lock and dam
@@ -279,6 +279,9 @@ class mvpProjectPlotter:
 	
 		#get third pool level
 		pool3Level = self.getDataIfExists(poolLevel3TsID)
+
+		#get fourth pool level
+		pool4Level = self.getDataIfExists(poolLevel4TsID)
 	
 		
 		#get tailwater level
@@ -393,6 +396,9 @@ class mvpProjectPlotter:
 	
 		if pool3Level is not None:
 			stageView.addCurve("Y1", pool3Level.getData())
+
+		if pool4Level is not None:
+			stageView.addCurve("Y1", pool4Level.getData())
 			
 		if tailwaterLevel is not None:
 			stageTailView.addCurve("Y1", taildata)
@@ -445,6 +451,8 @@ class mvpProjectPlotter:
 		## Plot Line Styles
 		if poolLevel is not None:
 			self.curveFormatter(plot, poolLevel.getData(), "blue", 3, "Pool Elevation", None, None)
+		if pool4Level is not None:
+			self.curveFormatter(plot, pool4Level.getData(), "green", 2, "", None, None)
 		if stageMeas is not None:
 			curve = self.curveFormatter(plot, stageMeas.getData(), "red", 0, 'Measurement', None, None)
 			curve.setLineVisible(False)
