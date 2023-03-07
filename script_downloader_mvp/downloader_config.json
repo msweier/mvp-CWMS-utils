@@ -28,9 +28,9 @@
       "help_url": null,
       "config_files": ["gageWindTempinputs.csv"]
     },
-    "5. Gate Entry": {
+    "5. Reservoir Forecast Plot": {
       "remote_dir": "watershed_scripts",
-      "filename": "gateEntry.py",
+      "filename": "forecastPlot.py",
       "update_libs": false,
       "help_url": null,
       "config_files": []
