@@ -234,7 +234,11 @@ poolPath3, obsOutflowPath, obsOutflow2Path, obsNetInflowPath, fcstDssFileName, \
 ncrfcForecastPaths, stageMarkers, flowMarkers, maxStorage, showGc, ElevationOrStage, \
 forecastInflowLegendText, inflowLegendText, nwsFpart, hmsRainOnGroundFparts, \
 hmsQPFfparts, nws0dayFpart, nws7dayFpart = params
-print(fPart)
+if showGc.lower == 'true':
+	showGc = True
+else:
+	showGc = False
+
 
 
 forecastType = ['View Only', "Internal Forecast Graphic Post","Public Forecast Graphic Post", "Internal 28 Day Graphic Post","Public 28 Day Text Post", 
