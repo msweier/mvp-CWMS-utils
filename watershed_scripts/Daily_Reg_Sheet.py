@@ -14,7 +14,7 @@ from hec.dataTable                  import HecDataTableToExcel, HecDataTableFram
 from com.rma.model import Project
 
 ###############
-code_version = '09Nov2022'
+code_version = '04Apr2023'
 flowTypes = ['Hornet Comp (Legacy) - green', 'CWMS Comp - red']
 #flowTypeSelection = JOptionPane.showInputDialog(None,"Choose Flow Comp to Display","Daily Reg Sheet - ver. {}".format(code_version),JOptionPane.PLAIN_MESSAGE,None,flowTypes,flowTypes[1])
 flowTypeSelection = flowTypes[1]
@@ -205,12 +205,16 @@ if flowTypeSelection:
 	#curdate = t.date(104)
 	#print t.dateAndTime(104)
 	###############
-	t.subtractHours(112)
+	offsetHours = 113 #cdt
+	#offsetHours = 112 #cst
+	
+	t.subtractHours(offsetHours) #cdt
+	
 	t.addHours(6)
 	#print t.dateAndTime(104)
 	startTime = t.dateAndTime(104)
 	
-	t.addHours(112+24*5+6)
+	t.addHours(offsetHours+24*5+6)
 	fcstTime = t.dateAndTime(104)
 	db.setTimeWindow(startTime, fcstTime)
 	print(startTime, curTime)
