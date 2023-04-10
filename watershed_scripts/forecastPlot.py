@@ -242,7 +242,7 @@ else:
 
 
 forecastType = ['View Only', "Internal Forecast Graphic Post","Public Forecast Graphic Post", "Internal 28 Day Graphic Post","Public 28 Day Text Post", 
-"Remove Public Forecast Graphic", "Remove Public 28 Day Text"]
+"Remove Public Forecast Graphic", "Remove Public 28 Day Text", "Edit Plot Inputs"]
 forecastTypeSelected = JOptionPane.showInputDialog(None,"Choose Forecast Type",'Forecast',JOptionPane.PLAIN_MESSAGE,None,forecastType,forecastType[0])
 print(forecastTypeSelected)
 if str(forecastTypeSelected) == "None" :
@@ -300,6 +300,8 @@ elif forecastTypeSelected == "Remove Public 28 Day Text":
 	else:
 		print("Overwrite {} failed to CWMS server: {}".format(fileNameCWMS,worked))
 		MessageBox.showInformation("Failed to overwrite public forecast for {} with blank text".format(projectName), "Failed")
+elif forecastTypeSelected == "Edit Plot Inputs":
+	os.popen(filePath)
 else:
 	print(forecastTypeSelected, 'internal' in forecastTypeSelected)
 	if 'Internal' in forecastTypeSelected:
