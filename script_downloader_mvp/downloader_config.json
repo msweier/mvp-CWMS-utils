@@ -25,7 +25,7 @@
       "remote_dir": "watershed_scripts",
       "filename": "mvpWindTempPlot.py",
       "update_libs": true,
-      "help_url": "https://github.com/msweier/mvp-CWMS-utils/blob/main/appdata/rsgis/cwmsDataLoader.md",
+      "help_url": null,
       "config_files": ["gageWindTempinputs.csv"]
     },
     "5. Reservoir Forecast Plot": {
@@ -46,7 +46,7 @@
       "remote_dir": "watershed_scripts",
       "filename": "script_downloader_mvp.py",
       "update_libs": false,
-      "help_url": null,
+      "help_url": "https://github.com/msweier/mvp-CWMS-utils/blob/main/appdata/rsgis/cwmsDataLoader.md",
       "config_files": []
     }
   },
