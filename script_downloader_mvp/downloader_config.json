@@ -35,7 +35,14 @@
       "help_url": null,
       "config_files": []
     },
-    "6. Script Downloader MVP": {
+    "6. Cwms Data Loader": {
+      "remote_dir": "watershed_scripts",
+      "filename": "cwmsDataLoader.py",
+      "update_libs": false,
+      "help_url": null,
+      "config_files": []
+    },
+    "7. Script Downloader MVP": {
       "remote_dir": "watershed_scripts",
       "filename": "script_downloader_mvp.py",
       "update_libs": false,
