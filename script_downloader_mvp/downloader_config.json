@@ -39,14 +39,14 @@
       "remote_dir": "watershed_scripts",
       "filename": "cwmsDataLoader.py",
       "update_libs": false,
-      "help_url": null,
+      "help_url": "https://github.com/msweier/mvp-CWMS-utils/blob/main/appdata/rsgis/cwmsDataLoader.md",
       "config_files": []
     },
     "7. Script Downloader MVP": {
       "remote_dir": "watershed_scripts",
       "filename": "script_downloader_mvp.py",
       "update_libs": false,
-      "help_url": "https://github.com/msweier/mvp-CWMS-utils/blob/main/appdata/rsgis/cwmsDataLoader.md",
+      "help_url": "null,
       "config_files": []
     }
   },
