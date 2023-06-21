@@ -46,7 +46,7 @@
       "remote_dir": "watershed_scripts",
       "filename": "script_downloader_mvp.py",
       "update_libs": false,
-      "help_url": "null,
+      "help_url": null,
       "config_files": []
     }
   },
