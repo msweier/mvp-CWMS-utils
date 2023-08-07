@@ -6,6 +6,11 @@ from hec.io          import TimeSeriesContainer
 from hec.heclib.util import HecTime
 from javax.swing import JFrame, JTextField, JLabel, JPanel, JButton, JTextArea, JScrollPane
 
+def returnFloat(i):
+	try:
+		return float(i)
+	except ValueError:
+		return None
 
 def ld1Parser(txt):
 
@@ -22,14 +27,14 @@ def ld1Parser(txt):
 	            tCol1 = datetime.combine(dt, datetime.strptime('00:00', '%H:%M').time()) +timedelta(hours=24)
 	        else:
 	        	tCol1 = datetime.combine(dt, datetime.strptime(line.split('Inst')[0].split(' ')[0], '%H:%M').time())
-	        vCol1 = float(line.split('Inst')[1].split('\t\t')[1].replace(',',''))
+	        vCol1 = returnFloat(line.split('Inst')[1].split('\t\t')[1].replace(',',''))
 	        tCol2 = datetime.combine(dt, datetime.strptime(line.split('Inst')[1].split('\t\t\t\t\t')[1].split(' ')[0], '%H:%M').time()) +timedelta(hours=24)
 	        if  '12:00' in line.split('Inst')[0].split(' ')[0] or '16:00' in line.split('Inst')[0].split(' ')[0]:
 	            
-	            vCol2 = float(line.split('Inst')[2].split('\t\t')[1].replace(',',''))
+	            vCol2 = returnFloat(line.split('Inst')[2].split('\t\t')[1].replace(',',''))
 	            col2.append([tCol2, vCol2, 'LockDam_01.Flow-Out.Inst.~4Hours.0.raw-FordHydro'])
 	        else:
-	            vCol2 = float(line.split('Inst')[1].split('Elev\t\t')[1].split('\t\t')[0])
+	            vCol2 = returnFloat(line.split('Inst')[1].split('Elev\t\t')[1].split('\t\t')[0])
 	            if 'Tailwater' in line:
 	            	col2.append([tCol2, vCol2, 'LockDam_01-Tailwater.Elev.Inst.~1Day.0.raw-FordHydro-MSL1912'])
 	            else:
@@ -39,7 +44,7 @@ def ld1Parser(txt):
 	
 	        #print(tCol1, vCol1, tCol2, vCol2)
 	    if 'Total Streamflow' in line:
-	        val = float(line.split('24 Hour Average		')[1].split('\t')[0].replace(',',''))
+	        val = returnFloat(line.split('24 Hour Average		')[1].split('\t')[0].replace(',',''))
 	        dailyAvg = [[dt, val, 'LockDam_01.Flow-Out.Ave.1Day.1Day.raw-FordHydro']]
 	#print(col1)
 	#print(col2)
@@ -69,33 +74,36 @@ def manualMeasurmentParser(txt):
 def storeTS(cwmsTsid, times, values, quality):
     global db
     # try:
-    storeToCwmsDbSuccessful = False
-    cwmsLoc, param, tp, interval, duration, version = cwmsTsid.split('.')
-    if 'Flow' in param:
-    	unit = 'cfs'
-    elif 'Elev' in param or 'Stage' in param:
-    	unit = 'ft'
+    if values[0]:
+	    storeToCwmsDbSuccessful = False
+	    cwmsLoc, param, tp, interval, duration, version = cwmsTsid.split('.')
+	    if 'Flow' in param:
+	    	unit = 'cfs'
+	    elif 'Elev' in param or 'Stage' in param:
+	    	unit = 'ft'
+	    else:
+	    	unit = None
+	    tsc = TimeSeriesContainer()
+	    tsc.fullName     = cwmsTsid
+	    IRREGULAR_INTERVAL = -1
+	    #print('*****',cwmsTsid)
+	    location, parameter, type, interval, duration, version       = cwmsTsid.split('.')
+	    if '~' in interval or '.Raw-CEMVP' in cwmsTsid or '.raw-FordHydro' in cwmsTsid: interval = IRREGULAR_INTERVAL
+	    tsc.location, tsc.parameter, tsc.type, tsc.interval, duration, tsc.version = [location, parameter, type, interval, duration, version  ]
+	    tsc.units        = unit
+	    tsc.times        = times
+	    tsc.values       = values
+	    tsc.quality      = quality
+	    tsc.numberValues = len(times)
+	    tsc.startTime    = times[0]
+	    tsc.endTime      = times[-1]
+	    
+	
+	    db.put(tsc)
+	    storeToCwmsDbSuccessful = True
+	    msg = "*** Saved record: {} to CWMS Database. ***".format(cwmsTsid)
     else:
-    	unit = None
-    tsc = TimeSeriesContainer()
-    tsc.fullName     = cwmsTsid
-    IRREGULAR_INTERVAL = -1
-    #print('*****',cwmsTsid)
-    location, parameter, type, interval, duration, version       = cwmsTsid.split('.')
-    if '~' in interval or '.Raw-CEMVP' in cwmsTsid or '.raw-FordHydro' in cwmsTsid: interval = IRREGULAR_INTERVAL
-    tsc.location, tsc.parameter, tsc.type, tsc.interval, duration, tsc.version = [location, parameter, type, interval, duration, version  ]
-    tsc.units        = unit
-    tsc.times        = times
-    tsc.values       = values
-    tsc.quality      = quality
-    tsc.numberValues = len(times)
-    tsc.startTime    = times[0]
-    tsc.endTime      = times[-1]
-    
-
-    db.put(tsc)
-    storeToCwmsDbSuccessful = True
-    msg = "*** Saved record: {} to CWMS Database. ***".format(cwmsTsid)
+		msg = "*** Error, could not save record: {} to CWMS Database. ***".format(cwmsTsid)
 
     return msg
 
