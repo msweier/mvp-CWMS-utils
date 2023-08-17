@@ -270,7 +270,7 @@ else:
 #if remove public forecast
 if forecastTypeSelected == "Remove Public Forecast Graphic":
 	#reference forecast unavail png from network
-	src = os.path.join(echPath,'forecastUnavailable.png')
+	src =  os.path.join(sharedPath,'forecastUnavailable.png')
 	#refence forecast plot on CWMS server
 	fileNameCWMS = os.path.join(cwmsPath ,'{}.Forecast.png'.format(projectName.replace(" ", "_"))) 
 	dest = fileNameCWMS
@@ -286,7 +286,7 @@ if forecastTypeSelected == "Remove Public Forecast Graphic":
 		MessageBox.showInformation("Failed to overwrite public forecast with blank image for {}".format(projectName), "Failed")
 elif forecastTypeSelected == "Remove Public 28 Day Text":
 	#reference blank txt
-	src = os.path.join(echPath,'blank.txt')
+	src = os.path.join(sharedPath,'forecastUnavailable.png')
 	#refence forecast plot on CWMS server
 	fileNameCWMS = os.path.join(cwmsPath ,projectName.replace(" ", "")+'_monthlyOutlook.txt') 
 	dest = fileNameCWMS
