@@ -236,9 +236,7 @@ class mvpProjectPlotter:
 		params = self.dataDict[watershedName][projectName]
 		datum, poolLevelTsID, poolLevel2TsID, poolLevel3TsID, poolLevel4TsID, outflowTsID, outflow2TsID, inflowTsID, forecastedInflowTsID, tailwaterLevelTsID, stageMarkers, flowMarkers, self.units, elevationOrStage = params
 
-		
-		#plot band if its a lock and dam
-		bandwidth = 0.2
+
 		# Determine Script Context
 		isClient = hec.lang.ClientAppCheck.haveClientApp()
 		isCWMSVue = hec.cwmsVue.CwmsListSelection.getMainWindow() is not None
@@ -359,6 +357,20 @@ class mvpProjectPlotter:
 				forecastedInflow = self.getDataIfExists(forecastedInflowTsID)
 				if forecastedInflow:
 					break
+		# get navigation flag
+		if 'LockDam' in poolLevelTsID:
+			t = HecTime(self.cal)
+			curTime = t.dateAndTime(104)
+			t.subtractDays(365)
+			yearAgo = t.dateAndTime(104)		
+			self.db.setTimeWindow(yearAgo, curTime)
+			navigationFlag = self.getDataIfExists('LockDam_04.Code-Navigation.Inst.~1Day.0.Raw-CEMVP').lastValidValue()
+
+
+			if navigationFlag ==1:
+				bandwidth = 0.2
+			else:
+				bandwidth = 0.3
 
 		
 		self.db.close()
