@@ -13,8 +13,32 @@ import java
 from hec.dataTable                  import HecDataTableToExcel, HecDataTableFrame
 from com.rma.model import Project
 
+import time
+from datetime import datetime, timedelta
+
+def checkDaylightSavingsTime(checkTime):
+	# Get the current time
+	#current_time = datetime.now()
+	
+	
+	# Get the time 10 days ago
+	#ten_days_ago = current_time - timedelta(days=7)
+	
+	# Convert the datetime object to a time tuple
+	time_tuple = checkTime.timetuple()
+	
+	# Convert the time tuple to seconds since the epoch
+	seconds_since_epoch = time.mktime(time_tuple)
+	
+	# Check if daylight saving time was in effect 10 days ago
+	if time.localtime(seconds_since_epoch).tm_isdst:
+	    print("Daylight saving is in effect.")
+	    return True
+	else:
+	    print("Daylight saving time is not in effect.")
+	    return False
 ###############
-code_version = '04Apr2023'
+code_version = '11Nov2023'
 flowTypes = ['Hornet Comp (Legacy) - green', 'CWMS Comp - red']
 #flowTypeSelection = JOptionPane.showInputDialog(None,"Choose Flow Comp to Display","Daily Reg Sheet - ver. {}".format(code_version),JOptionPane.PLAIN_MESSAGE,None,flowTypes,flowTypes[1])
 flowTypeSelection = flowTypes[1]
@@ -116,8 +140,8 @@ if flowTypeSelection:
 	idld8tgates = 'LockDam_08-TainterGates.Opening-Normal.Inst.15Minutes.0.comp'
 	idld9rgates = 'LockDam_09-RollerGates.Opening-Normal.Inst.15Minutes.0.comp'
 	idld9tgates = 'LockDam_09-TainterGates.Opening-Normal.Inst.15Minutes.0.comp'
-	idld10rgates = 'LockDam_10-RollerGates.Opening-Normal.Inst.1Hour.0.comp'
-	idld10tgates = 'LockDam_10-TainterGates.Opening-Normal.Inst.1Hour.0.comp'
+	idld10rgates = 'LockDam_10-RollerGates.Opening-Normal.Inst.15Minutes.0.comp'
+	idld10tgates = 'LockDam_10-TainterGates.Opening-Normal.Inst.15Minutes.0.comp'
 	# flow/ft gate opening
 	idld2tqft = 'LockDam_02-TainterGates.Flow-PerFootOpen.Inst.15Minutes.0.comp'
 	idld3rqft = 'LockDam_03-RollerGates.Flow-PerFootOpen.Inst.15Minutes.0.comp'
@@ -200,15 +224,44 @@ if flowTypeSelection:
 	curdate = t.date(104)
 	t.setTime('0000')
 	##############
-	#t.setDate('2021-11-05')
+	#t.setDate('2023-03-11')
 	#curTime = t.dateAndTime(104)
 	#curdate = t.date(104)
 	#print t.dateAndTime(104)
 	###############
-	offsetHours = 113 #cdt
+	# Get the current time
+	current_time = datetime.now()
+	#current_time = current_time.replace(hour=00, minute=00)
+	#current_time = datetime(2023,03,12, 8, 00)
+
+	startData = current_time - timedelta(hours=113)
+
+
+	dstNow = checkDaylightSavingsTime(current_time)
+	dstStart = checkDaylightSavingsTime(startData)
+	offsetMinutes = 0
+
+	if dstNow and dstStart:
+		print('All DST')
+		offsetHours = 113 #cdt
+	elif dstStart:
+		print('Fall back - DST is not now but DST is starting time')
+		offsetHours = 112 #fall back
+		offsetMinutes = 15
+	elif dstNow:
+		print('Spring ahead - DST is now, but not starting time')
+		offsetHours = 113 #cdt
+	else:
+		print('All standard time')
+		offsetHours = 112 #cst		
+
+
+	
+	#offsetHours = 113 #cdt
 	#offsetHours = 112 #cst
 	
-	t.subtractHours(offsetHours) #cdt
+	t.subtractHours(offsetHours) 
+	t.addMinutes(offsetMinutes)
 	
 	t.addHours(6)
 	#print t.dateAndTime(104)
