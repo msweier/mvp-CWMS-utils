@@ -607,8 +607,6 @@ if flowTypeSelection:
 	
 	#desktop path
 	user = os.getenv('username')
-	if 'B6PEBKJ1' in user:
-		user = 'B0rbwbkj'
 	desktopPath = "C:\Users\{}\Desktop\DailyRegSheet".format(user)
 	##create directory if it doesn't exist
 	if not os.path.exists(desktopPath):
