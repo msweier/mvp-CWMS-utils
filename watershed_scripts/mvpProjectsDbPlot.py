@@ -503,7 +503,7 @@ class mvpProjectPlotter:
 			self.curveFormatter(plot, forecastedInflow.getData(), "black", 1.5, "Forecasted Inflow (NWS)", "dash", None)
 
 		if outflow2 is not None:
-			self.curveFormatter(plot, outflow2.getData(), "cyan", 1.5, None, "dash", None)
+			self.curveFormatter(plot, outflow2.getData(), "gray", 1.5, None, "dash", None)
 		
 			
 		# X Axes Marker
@@ -524,13 +524,13 @@ class mvpProjectPlotter:
 		if tailwaterLevel is not None:
 			plot.getViewport(tailwaterLevel.getData()).addAxisMarker(markerCurTime)
 		
-		if stageMarkers:
+		if stageMarkers != '':
 			## plot marker bands
 			try:
 				for a in stageMarkers.split("|"):
 					num, comment, color =  a.split(';')
 					self.markerBand(str(float(num)),comment.strip(), plot.getViewport(poolLevel.getData()), color.strip(), 'soild')
-			except NameError:
+			except:
 				print("stageMarkers not defined")
 
 		if "LockDam" in poolLevelTsID:
@@ -539,13 +539,13 @@ class mvpProjectPlotter:
 				self.lockDamBand(poolLevel2TsID, plot.getViewport(poolLevel.getData()),bandwidth, "Dash Dot-Dot")
 			except:
 				pass
-		if flowMarkers:
+		if flowMarkers != '':
 			## plot marker bands
 			try:
 				for a in flowMarkers.split("|"):
 					num, comment, color =  a.split(';')
 					self.markerBand(str(float(num)),comment.strip(), plot.getViewport(outflow.getData()), color.strip(), 'soild')
-			except NameError:
+			except:
 				print("flowMarkers not defined")
 		
 		del(datum, poolLevelTsID, poolLevel2TsID, poolLevel3TsID, outflowTsID, inflowTsID, forecastedInflowTsID, tailwaterLevelTsID, stageMarkers, flowMarkers, elevationOrStage)  	
