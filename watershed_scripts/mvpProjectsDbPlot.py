@@ -234,7 +234,7 @@ class mvpProjectPlotter:
 	
 	def plotFunct(self, event, watershedName, projectName):	
 		params = self.dataDict[watershedName][projectName]
-		datum, poolLevelTsID, poolLevel2TsID, poolLevel3TsID, poolLevel4TsID, outflowTsID, outflow2TsID, inflowTsID, forecastedInflowTsID, tailwaterLevelTsID, stageMarkers, flowMarkers, self.units, elevationOrStage = params
+		datum, poolLevelTsID, poolLevel2TsID, poolLevel3TsID, poolLevel4TsID, outflowTsID, outflow2TsID, outflowMeasTsID, inflowTsID, forecastedInflowTsID, tailwaterLevelTsID, stageMarkers, flowMarkers, self.units, elevationOrStage = params
 
 
 		# Determine Script Context
@@ -317,16 +317,18 @@ class mvpProjectPlotter:
 
 					
 		# get outflow manual measurment
-		outflowMeasTsIdList = ['{}-Tailwater.Flow.Inst.0.0.Raw-USGS'.format(projectName),
-					'{}-Tailwater.Flow.Inst.0.0.Raw-CEMVP'.format(projectName),]
-		for outflowMeasTsID in outflowMeasTsIdList:
-			outflowMeas = self.getDataIfExists(outflowMeasTsID)
-			if outflowMeas:
-				print(outflowMeas)
-				break
-		if '.Inst.0.0' in outflow2TsID:
-			outflowMeas = outflow2
-			outflow2 = None
+		outflowMeas = self.getDataIfExists(outflowMeasTsID)
+		if outflowMeas is None:
+			outflowMeasTsIdList = ['{}-Tailwater.Flow.Inst.0.0.Raw-USGS'.format(projectName),
+						'{}-Tailwater.Flow.Inst.0.0.Raw-CEMVP'.format(projectName),]
+			for outflowMeasTsID in outflowMeasTsIdList:
+				outflowMeas = self.getDataIfExists(outflowMeasTsID)
+				if outflowMeas:
+					print(outflowMeas)
+					break
+			#if '.Inst.0.0' in outflow2TsID:
+			#	outflowMeas = outflow2
+			#	outflow2 = None
 		
 		#get inflow
 		if 'LockDam' not in poolLevelTsID:
@@ -548,7 +550,7 @@ class mvpProjectPlotter:
 			except:
 				print("flowMarkers not defined")
 		
-		del(datum, poolLevelTsID, poolLevel2TsID, poolLevel3TsID, outflowTsID, inflowTsID, forecastedInflowTsID, tailwaterLevelTsID, stageMarkers, flowMarkers, elevationOrStage)  	
+		del(datum, poolLevelTsID, poolLevel2TsID, poolLevel3TsID, outflowTsID, outflow2TsID, outflowMeasTsID, inflowTsID, forecastedInflowTsID, tailwaterLevelTsID, stageMarkers, flowMarkers, elevationOrStage)  	
 
 	
 
