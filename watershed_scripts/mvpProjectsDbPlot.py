@@ -55,7 +55,9 @@ class mvpProjectPlotter:
 
 		timeWindowPanel = JPanel()
 
-		self.lookBackOptions = ['Lookback 7 days', 'Lookback 30 days', 'Lookback 3 months', 'Lookback 6 months', 'Lookback 12 months', 'Lookback 18 months']
+		self.lookBackOptions = ['Lookback 7 days', 'Lookback 30 days', 'Lookback 3 months', 'Lookback 6 months', 
+					'Lookback 12 months', 'Lookback 18 months', 'Lookback 2 years', 
+					'Lookback 3 years', 'Lookback 5 years', 'Lookback 10 years']
 		self.cbLookBack = JComboBox(self.lookBackOptions)
 		self.lookForwardOptions = ['Look forward 7 days', 'Look forward 28 days', 'Look forward 0 days']
 		self.cbLookForward = JComboBox(self.lookForwardOptions)
@@ -86,6 +88,8 @@ class mvpProjectPlotter:
 		#print(cbSelectionTextLB)
 		if 'months' in selectionText:
 			days = days*30.4167
+		if 'years' in selectionText:
+			days = days*365.25
 		return days
 
 	def siteSelect(self, event):
